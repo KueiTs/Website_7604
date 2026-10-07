@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daily English Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F4; --sheet:#FFFFFF; --ink:#15202B; --muted:#5A6774; --line:#D5DBE1; --soft:#F6F8FA;
+  --marker:#FFE36E; --markInk:#15202B;
+  --l1:#2E8B57; --l2:#2F6DB5; --l3:#7A4CC2;
+  --ok:#2E8B57; --bad:#C2453A; --warn:#B7791F;
+  --focus:#2F6DB5;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11171E; --sheet:#19212A; --ink:#E5EAF0; --muted:#94A2B0; --line:#2B3641; --soft:#1F2832;
+    --marker:rgba(255,214,0,.32); --markInk:#FFF6CC;
+    --l1:#5CC08A; --l2:#6AA4EA; --l3:#B08CF0; --ok:#5CC08A; --bad:#EE7D72; --warn:#E3B04B; --focus:#6AA4EA;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11171E; --sheet:#19212A; --ink:#E5EAF0; --muted:#94A2B0; --line:#2B3641; --soft:#1F2832;
+  --marker:rgba(255,214,0,.32); --markInk:#FFF6CC;
+  --l1:#5CC08A; --l2:#6AA4EA; --l3:#B08CF0; --ok:#5CC08A; --bad:#EE7D72; --warn:#E3B04B; --focus:#6AA4EA;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 140px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+mark{background:linear-gradient(transparent 38%,var(--marker) 38%,var(--marker) 92%,transparent 92%);color:var(--markInk);padding:0 .08em}
+.zh{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.topin{max-width:1180px;margin:0 auto;padding:12px 18px 0;display:flex;flex-wrap:wrap;align-items:end;gap:6px 18px}
+.brand{font-weight:700;font-size:1.25rem;letter-spacing:-.01em;margin:0 auto 8px 0}
+.brand small{display:block;font-weight:400;font-size:.8rem;color:var(--muted)}
+.stats{display:flex;gap:14px;font-size:.85rem;color:var(--muted);margin-bottom:10px}
+.stats b{color:var(--ink);font-size:1.05rem}
+nav.tabs{flex-basis:100%;display:flex;gap:2px;overflow-x:auto}
+nav.tabs button{border:0;background:none;padding:10px 14px;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;font-weight:500}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+
+main{max-width:1180px;margin:0 auto;padding:20px 18px 60px}
+.view[hidden]{display:none}
+h2{font-size:1.5rem;margin:0 0 2px;letter-spacing:-.01em}
+h3{font-size:1rem;margin:28px 0 10px}
+.sub{color:var(--muted);margin:0 0 6px}
+.core{border-left:4px solid var(--ink);padding:6px 12px;margin:12px 0 4px;background:var(--sheet)}
+
+/* library */
+.lib{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;align-items:start}
+.side{position:sticky;top:145px;max-height:calc(100vh - 160px);overflow:auto;padding-right:4px}
+.side .set{margin-bottom:14px}
+.side .setbtn{display:block;width:100%;text-align:left;border:0;background:none;font-weight:700;padding:4px 6px;cursor:pointer;border-radius:4px}
+.side .setbtn small{display:block;font-weight:400;color:var(--muted);font-size:.78rem}
+.side .gbtn{display:flex;justify-content:space-between;width:100%;text-align:left;border:0;background:none;padding:5px 8px 5px 14px;cursor:pointer;border-radius:4px;color:var(--ink);font-size:.95rem}
+.side .gbtn span:last-child{color:var(--muted);font-size:.8rem}
+.side .gbtn[aria-current="true"],.side .setbtn[aria-current="true"]{background:var(--sheet);box-shadow:inset 3px 0 0 var(--ink)}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:22px 24px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--soft);font-weight:600;font-size:.85rem;color:var(--muted);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.en{font-weight:600;white-space:nowrap}
+tr.item{cursor:pointer}
+tr.item:hover td{background:var(--soft)}
+tr.exrow td{background:var(--soft);padding:8px 14px 12px}
+.fit{display:inline-block;font-size:.75rem;padding:1px 7px;border-radius:10px;border:1px solid;white-space:nowrap}
+.fit.w{color:var(--ok)} .fit.c{color:var(--muted)} .fit.x{color:var(--bad)}
+.cmp td:first-child,.cmp td:nth-child(2){font-weight:600;white-space:nowrap}
+.cmp td:nth-child(2){color:var(--muted)}
+.vs{color:var(--muted);font-weight:400;padding:0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:14px;padding:2px 10px;font-size:.88rem;background:var(--sheet)}
+
+/* ladder */
+.ladder{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end}
+.step{border:1px solid var(--line);border-top:5px solid var(--lc);border-radius:4px;padding:10px 12px;background:var(--sheet)}
+.step:nth-child(1){--lc:var(--l1)} .step:nth-child(2){--lc:var(--l2);margin-top:22px} .step:nth-child(3){--lc:var(--l3);margin-top:44px}
+.ladder{align-items:start}
+.step h4{margin:0 0 6px;font-size:.9rem;color:var(--lc)}
+.sent{padding:8px 0;border-top:1px dashed var(--line)}
+.sent:first-of-type{border-top:0}
+.sent .line{display:flex;gap:8px;align-items:flex-start}
+.sent .tx{flex:1}
+.sent .tr{color:var(--muted);font-size:.88rem;margin-top:2px}
+.hidezh .tr{display:none}
+.ctx{font-size:.7rem;border-radius:3px;padding:1px 5px;margin-right:6px;vertical-align:2px;background:var(--soft);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.ctx.S{color:var(--l2)} .ctx.M{color:var(--l3)}
+.lvb{font-size:.7rem;border-radius:3px;padding:1px 6px;margin-right:6px;vertical-align:2px;color:#fff;white-space:nowrap}
+.lvb.l1{background:var(--l1)} .lvb.l2{background:var(--l2)} .lvb.l3{background:var(--l3)}
+.ttsw{display:inline-flex;align-items:center;gap:4px}
+.ttsw button{border:1px solid var(--line);background:var(--sheet);color:var(--muted);font-size:.78rem;padding:2px 8px;cursor:pointer}
+.ttsw button:first-of-type{border-radius:4px 0 0 4px} .ttsw button:last-of-type{border-radius:0 4px 4px 0;margin-left:-1px}
+.ttsw button[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:20;background:var(--sheet);border:1px solid var(--ink);border-radius:6px;padding:10px 14px;max-width:92vw;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+#toast[hidden]{display:none}
+#toast .btn{padding:5px 10px;font-size:.85rem}
+.say{border:1px solid var(--line);background:var(--sheet);border-radius:50%;width:28px;height:28px;flex:none;cursor:pointer;font-size:.7rem;line-height:1;color:var(--muted)}
+.say:hover{color:var(--ink);border-color:var(--ink)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.toggle{display:inline-flex;gap:6px;align-items:center;font-size:.9rem;color:var(--muted);cursor:pointer}
+.lvkey{display:inline-flex;gap:10px;font-size:.8rem;color:var(--muted)}
+.lvkey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+
+/* visuals */
+.zoom{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.zoomcol h4{margin:0 0 8px;font-size:.85rem;color:var(--muted)}
+.nest{border:2px solid var(--ink);border-radius:6px;padding:8px 10px 10px}
+.nest .nest{margin-top:6px;border-width:1.5px}
+.nest b{font-size:.95rem}
+.nest .k{font-size:.78rem;color:var(--muted);margin-left:6px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ink);margin-right:6px;vertical-align:0}
+.timeline svg{width:100%;height:auto;display:block}
+
+/* buttons */
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--sheet);padding:9px 16px;border-radius:4px;cursor:pointer;font-weight:600}
+.btn.ghost{background:var(--sheet);color:var(--ink);border-color:var(--line)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* today */
+.today{max-width:680px;margin:0 auto}
+.meter{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:6px 0 18px}
+.meter div{height:100%;background:var(--ink);transition:width .25s}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:28px 26px;min-height:300px;display:flex;flex-direction:column}
+.card .from{font-size:.8rem;color:var(--muted);margin-bottom:14px}
+.card .q{font-size:1.45rem;font-weight:600;line-height:1.35}
+.card .q small{display:block;font-size:.95rem;font-weight:400;color:var(--muted);margin-top:6px}
+.card .a{margin-top:20px;padding-top:16px;border-top:2px solid var(--ink)}
+.card .a .big{font-size:1.4rem;font-weight:700}
+.card .actions{margin-top:auto;padding-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.card .actions .btn{flex:1;min-width:130px}
+.btn.weak{background:var(--sheet);color:var(--bad);border-color:var(--bad)}
+.btn.good{background:var(--ok);border-color:var(--ok);color:#fff}
+.done{text-align:center;padding:40px 10px}
+.done .n{font-size:3rem;font-weight:700}
+
+/* quiz */
+.qsets{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 20px}
+.qsets button{border:1px solid var(--line);background:var(--sheet);border-radius:4px;padding:8px 12px;cursor:pointer}
+.qsets button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);font-weight:600}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.opts button{border:1px solid var(--line);background:var(--soft);border-radius:6px;padding:14px;cursor:pointer;font-size:1.05rem;font-weight:600;text-align:left}
+.opts button.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--sheet))}
+.opts button.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--sheet))}
+.fb{margin-top:16px;padding:12px 14px;border-radius:4px;background:var(--soft)}
+.fb b.ok{color:var(--ok)} .fb b.no{color:var(--bad)}
+
+/* add */
+.add{max-width:820px}
+textarea{width:100%;min-height:140px;padding:12px;border:1px solid var(--line);border-radius:4px;background:var(--sheet);resize:vertical}
+.drop{border:1.5px dashed var(--line);border-radius:4px;padding:14px;text-align:center;color:var(--muted);cursor:pointer;background:var(--sheet)}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.thumbs img{height:70px;border-radius:3px;border:1px solid var(--line)}
+.status{font-size:.9rem;color:var(--muted);min-height:1.4em;margin:10px 0}
+.note{font-size:.88rem;color:var(--muted);background:var(--sheet);border:1px solid var(--line);border-radius:4px;padding:10px 12px}
+.mylist li{margin:6px 0}
+.linkbtn{border:0;background:none;color:var(--bad);cursor:pointer;text-decoration:underline;font-size:.85rem}
+
+@media (max-width:860px){
+  .lib{grid-template-columns:1fr}
+  .side{position:static;max-height:none;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+  .side .set{flex:none;min-width:190px;background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:8px}
+  .ladder{grid-template-columns:1fr}
+  .step:nth-child(n){margin-top:0}
+  .zoom{grid-template-columns:1fr}
+  .sheet{padding:16px}
+  .opts{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topin">
+    <p class="brand">Daily English Lab<small class="zh">Server 機構工程師的每日英文練習</small></p>
+    <div class="stats zh" aria-live="polite">
+      <span>連續 <b id="stStreak">0</b> 天</span>
+      <span>今天 <b id="stToday">0</b> 張</span>
+      <span>已熟 <b id="stKnown">0</b> / <span id="stTotal">0</span></span>
+      <span class="ttsw">發音
+        <button type="button" data-tts="browser" aria-pressed="true" title="使用裝置內建語音">裝置語音</button><button type="button" data-tts="google" aria-pressed="false" title="開啟 Google 翻譯頁面，按喇叭聽發音">Google 翻譯</button>
+      </span>
+    </div>
+    <nav class="tabs zh" role="tablist">
+      <button role="tab" data-v="today" aria-selected="true">今日練習</button>
+      <button role="tab" data-v="lib" aria-selected="false">詞庫與比較表</button>
+      <button role="tab" data-v="quiz" aria-selected="false">選擇測驗</button>
+      <button role="tab" data-v="add" aria-selected="false">新增詞彙</button>
+    </nav>
+  </div>
+</header>
+
+<main class="zh">
+  <section class="view" id="v-today"></section>
+  <section class="view" id="v-lib" hidden><div class="lib"><aside class="side" id="side"></aside><div id="detail"></div></div></section>
+  <section class="view" id="v-quiz" hidden></section>
+  <section class="view add" id="v-add" hidden></section>
+</main>
+
+<script>
+// lv: 1 = A2+/B1, 2 = B1, 3 = B1+/B2 ; ctx: L 生活, S Server 機構, M 會議
+// fit: w 工作可用, c 口語, ! 小心使用
+const SETS = [
+  {id:"verbs", name:"動詞搭配", desc:"Have / Take / Do / Make… 常見搭配", src:"Important English Vocabulary"},
+  {id:"prep", name:"介系詞", desc:"at / on / in / by / for / with…", src:"12 Important Prepositions、At On In"},
+  {id:"native", name:"道地說法", desc:"Basic → Native 40 句", src:"Basic Phrases → Native Phrases"},
+  {id:"talk", name:"問答回應", desc:"一個問題，五種回法", src:"One Question → 5 Native Replies"},
+  {id:"travel", name:"出差住宿", desc:"飯店入住 20 句", src:"English for Hotel Check-In"},
+  {id:"grammar", name:"文法比較", desc:"when vs while", src:"when 和 while 差別"},
+  {id:"added", name:"新增單字", desc:"在對話中加入的詞彙", src:""},
+];
+
+// 每個詞補上缺少的兩個等級例句（依等級由低到高填入缺的等級）：[ctx, en, zh]
+const EX3 = {
+have:[
+ [["L","We *had a drink* together after the project review.","專案審查後我們一起喝了一杯。"],["M","After the customer visit, our manager invited everyone to *have a drink* and relax.","客戶來訪後，主管請大家去喝一杯放鬆一下。"]],
+ [["L","When I come back from a long build, I like to *have a hot bath*.","長時間 build 回來後，我喜歡泡個熱水澡。"],["L","My back hurts after carrying the chassis all day, so I'll *have a bath* tonight.","整天搬機箱背很痛，今晚要泡個澡。"]],
+ [["M","Let's *have breakfast* at the hotel and then go to the factory.","我們在飯店吃完早餐再去工廠。"],["S","During the build week, we *have breakfast* at 7 so we can start the line check at 8.","build 那週我們 7 點吃早餐，8 點才能開始產線檢查。"]],
+ [["L","I'm tired. I need to *have a rest*.","我好累，需要休息一下。"],["M","We've talked about the bracket for two hours, so let's *have a rest* and come back with fresh eyes.","我們討論 bracket 兩小時了，先休息，回來再用新角度看。"]],
+ [["L","I *have lunch* at 12.","我 12 點吃午餐。"],["M","Why don't we *have lunch* with the supplier and talk about the cost-down plan?","我們何不和供應商吃午餐，順便談降成本計畫？"]],
+ [["L","I always *have a quick shower* after I go running.","跑步後我都會快速沖個澡。"],["L","The hotel water was cold, so I couldn't *have a shower* before the customer meeting.","飯店水是冷的，客戶會議前沒辦法沖澡。"]]],
+take:[
+ [["S","After we *take a break*, we'll start the second drop test.","休息完後我們開始第二次落摔測試。"],["M","We've covered the thermal part, so let's *take a short break* before we move on to cable routing.","散熱部分講完了，先短暫休息再進 cable 走線。"]],
+ [["M","I sent you the new drawing. Please *take a look* when you have time.","我寄了新圖，有空請看一下。"],["S","Before we release the drawing, could you *take a look at* the tolerance on the latch area?","發圖前，你可以看一下卡勾區的公差嗎？"]],
+ [["L","I'm going to *take an English exam* next month, so I practice every day.","我下個月要考英文，所以每天練習。"],["L","Many engineers *take the TOEIC exam* to show their English level to the company.","很多工程師考多益來向公司證明英文程度。"]],
+ [["M","Please *take a seat*. The customer will join us in five minutes.","請坐，客戶五分鐘後加入。"],["M","There are not enough chairs, so some people can *take a seat* at the back.","椅子不夠，有些人可以坐到後面。"]],
+ [["L","I want to *take a chance* and try a new job.","我想冒險試試新工作。"],["S","Let's not *take a chance*. Please check the screw length again.","我們別冒險，請再確認一次螺絲長度。"]],
+ [["L","Can you *take a photo* of us?","可以幫我們拍張照嗎？"],["S","When you find a failure, *take a photo* with a ruler next to it so we can see the size.","發現失效時，旁邊放尺拍照，才看得出尺寸。"]]],
+do:[
+ [["M","I can't talk now. I need to *do my work* before the deadline.","現在不能聊，截止前我得做完工作。"],["M","If everyone *does their work* on time, we can release the drawings by Friday.","如果大家都準時完成工作，週五前就能發圖。"]],
+ [["S","If we *do nothing*, the noise problem will get worse.","如果什麼都不做，噪音問題會更嚴重。"],["M","*Doing nothing* is also a choice, but it may cost us more in the next build.","什麼都不做也是一種選擇，但下次 build 可能代價更高。"]],
+ [["L","After dinner, it's my turn to *do the dishes*.","晚餐後輪到我洗碗。"],["L","I usually *do the dishes* while I listen to English podcasts.","我通常邊洗碗邊聽英文 podcast。"]],
+ [["L","I *do my hair* in the morning.","我早上整理頭髮。"],["L","She spent twenty minutes *doing her hair* before the company party.","公司派對前她花了二十分鐘弄頭髮。"]],
+ [["L","Sitting all day hurts my back, so I *do yoga* after work.","整天坐著背會痛，所以我下班後做瑜珈。"],["L","Since I started to *do yoga*, my neck pain from computer work is much better.","開始做瑜珈後，用電腦造成的脖子痛好多了。"]],
+ [["L","Can you *do me a favor*?","可以幫我個忙嗎？"],["M","Could you *do me a favor* and send the 3D file to the supplier before you leave today?","你今天離開前可以幫我把 3D 檔寄給供應商嗎？"]]],
+make:[
+ [["S","Please clean up after the build. Don't *make a mess* in the lab.","build 後請收拾，不要把實驗室弄亂。"],["M","Changing the part number now will *make a mess* of the BOM, so let's wait for the next ECN.","現在改料號會把 BOM 搞亂，等下一個 ECN 再改。"]],
+ [["L","Good shoes *make a difference*.","好鞋子差很多。"],["S","Moving the fan 5 mm closer *made a big difference* in CPU temperature.","把風扇移近 5 mm，CPU 溫度差很多。"]],
+ [["L","I *make an effort* to speak English every day.","我每天努力說英文。"],["M","The supplier *made a big effort* to improve the flatness, but it is still out of spec.","供應商很努力改善平面度，但還是超規。"]],
+ [["L","My friend *makes money* by selling old parts online.","我朋友在網路上賣舊零件賺錢。"],["M","We don't *make much money* on this project, so every cost-down idea helps.","這個專案賺不多，每個降成本點子都有幫助。"]],
+ [["M","We can't *make a decision* until we see the test result.","看到測試結果之前我們無法決定。"],["M","The customer asked us to *make a final decision* on the material by next Wednesday.","客戶要我們下週三前對材料做最後決定。"]],
+ [["L","In the hotel, I don't need to *make the bed*.","在飯店我不用整理床。"],["L","My kids learned to *make the bed* by themselves before they go to school.","孩子學會上學前自己整理床鋪。"]]],
+go:[
+ [["M","I'm going to *go home* early today because my son is sick.","我兒子生病，今天要早點回家。"],["S","We can't *go home* until the burn-in test finishes and the log looks OK.","燒機測試結束、log 正常之前我們不能回家。"]],
+ [["L","I *went shopping* for a new jacket last weekend.","上週末我去買新外套。"],["L","When I travel for work, I don't have time to *go shopping*, so I buy gifts at the airport.","出差時沒空逛街，所以在機場買禮物。"]],
+ [["L","The kids *go crazy* when they see the snow.","孩子看到雪就瘋了。"],["S","The fan speed *goes crazy* when the sensor reads the wrong temperature.","感測器讀錯溫度時，風扇轉速會亂飆。"]],
+ [["L","I want to *go abroad* this summer.","我今年夏天想出國。"],["M","Before I *go abroad* for the customer build, I need to prepare all the test fixtures.","出國跟客戶 build 前，我要準備好所有測試治具。"]],
+ [["L","The small shop *went bankrupt*.","那家小店破產了。"],["M","One of our cable suppliers *went bankrupt* last year.","我們一家 cable 供應商去年倒閉了。"]],
+ [["L","When I can't solve a problem, I *go for a walk* to think.","解決不了問題時，我會去散步想想。"],["L","After sitting in meetings all morning, I *went for a short walk* to clear my head.","整個早上都在開會，我去散步讓頭腦清醒。"]]],
+come:[
+ [["L","I *came close to* missing the bus.","我差點沒趕上公車。"],["S","The sample *came close to* passing the drop test.","樣品差一點就通過落摔測試。"]],
+ [["L","The summer is *coming to an end*.","夏天快結束了。"],["M","As the project *comes to an end*, let's write a lessons-learned report for the next design.","專案快結束了，我們寫份經驗回顧給下一個設計。"]],
+ [["S","On build days, I *come early* to check the parts.","build 那天我會早到檢查零件。"],["M","If you *come early* tomorrow, we can test the new bracket before the customer arrives.","如果你明天早到，可以在客戶來之前先測新 bracket。"]],
+ [["M","For this project, cost *comes first*, then weight.","這個專案成本優先，其次是重量。"],["S","When we choose a screw, reliability should *come first*, not the price.","選螺絲時應該可靠度優先，而不是價格。"]],
+ [["L","He ran slowly and *came last* in the race.","他跑得慢，比賽最後一名。"],["S","In the airflow simulation, the old design *came last* among the three options.","風流模擬中，舊設計在三個方案裡排最後。"]],
+ [["M","Please *come on time*. The customer is very strict.","請準時，客戶很嚴格。"],["S","If the tooling parts don't *come on time*, we will have to use 3D-printed samples for EVT.","模具件如果沒準時到，EVT 只能用 3D 列印樣品。"]]],
+get:[
+ [["L","My wife *got pregnant* in the spring.","我太太春天懷孕了。"],["M","After my coworker *got pregnant*, we moved some of her lab tasks to other engineers.","同事懷孕後，我們把她部分實驗室工作轉給其他工程師。"]],
+ [["L","We *got lost* on the way to the customer's office.","我們去客戶辦公室的路上迷路了。"],["M","Without a clear agenda, it's easy to *get lost* in the details during the meeting.","沒有清楚議程，開會很容易迷失在細節裡。"]],
+ [["S","Please *get the fixtures ready* before 9.","請 9 點前準備好治具。"],["M","We need to *get ready for* the design review, so let's finish the slides today.","我們要為設計審查做準備，今天把簡報完成。"]],
+ [["S","We *got started* on the new chassis design last week.","我們上週開始新機箱設計。"],["M","Let's *get started* with a quick update, and then we'll go through the open issues.","我們先快速更新進度，再逐一看待解問題。"]],
+ [["L","After school, she *got a job* in Hsinchu.","畢業後她在新竹找到工作。"],["L","He *got a job* as a mechanical engineer because of his sheet metal experience.","他因為鈑金經驗而得到機構工程師的工作。"]],
+ [["L","They *got married* last year.","他們去年結婚了。"],["M","My coworker *is getting married* next month, so she will take two weeks off.","同事下個月結婚，會請兩週假。"]]],
+letme:[
+ [["S","*Let me know* when the samples arrive.","樣品到了跟我說。"],["M","Please *let me know* by Thursday if the new schedule doesn't work for your team.","如果新時程對你們團隊不行，請週四前告訴我。"]],
+ [["M","That's a good question. *Let me think* for a second.","好問題，讓我想一下。"],["S","*Let me think about* other ways to route the cable before we change the bracket.","改 bracket 之前，讓我想想其他走線方式。"]],
+ [["S","That chassis is heavy. *Let me help you* carry it.","機箱很重，我幫你搬。"],["M","If you're not sure how to run the stack-up, *let me help you* set up the first one.","如果不確定怎麼做公差疊加，我幫你設定第一個。"]],
+ [["M","*Let me go first*, and then you can show the test data.","我先講，然後你再展示測試數據。"],["M","*Let me go* through the open issues one by one before we talk about the schedule.","談時程前，讓我逐一說明待解問題。"]],
+ [["S","*Let me see*... the gap is about 0.8 mm.","我看看…間隙大約 0.8 mm。"],["M","*Let me see* if I can find the old test report and send it to you after the meeting.","我看看能不能找到舊測試報告，會後寄給你。"]],
+ [["L","*Let me explain*.","讓我解釋一下。"],["M","*Let me explain* the root cause first, and then we can discuss short-term and long-term actions.","先讓我說明根本原因，再討論短期和長期對策。"]]],
+put:[
+ [["L","I *put on weight* this year.","我今年變胖了。"],["L","Many engineers *put on weight* during long projects because they eat late and don't exercise.","很多工程師在長專案期間變胖，因為吃得晚又不運動。"]],
+ [["S","*Put on* your ESD *jacket* before you touch the PCBA.","碰 PCBA 前先穿上防靜電外套。"],["L","It was raining when I left the hotel, so I *put on a jacket* and took an umbrella.","離開飯店時在下雨，所以我穿上外套並帶了傘。"]],
+ [["L","She *puts on makeup* before every video call.","每次視訊會議前她都化妝。"],["L","My daughter is learning to *put on makeup* for her school show.","女兒正在學化妝準備學校表演。"]],
+ [["L","In Indian English, people often say *put off the light*, but Americans say *turn off*.","印度英語常說 put off the light，美國人說 turn off。"],["S","Please *turn off the lights* and the power supply before you leave the lab for the weekend.","週末離開實驗室前請關燈並關掉電源供應器。"]],
+ [["L","Let's *put off* the trip.","我們延後旅行吧。"],["M","The supplier asked us to *put off the meeting* because their samples failed incoming inspection.","供應商因樣品進料檢驗沒過，請我們延後會議。"]],
+ [["L","I *put my desk in order* every Friday.","我每週五整理桌面。"],["M","Before the customer audit, we need to *put all the inspection records in order* by date.","客戶稽核前，我們要把所有檢驗紀錄依日期整理好。"]]],
+aoi:[
+ [["S","The burn-in test will finish *at 5 PM*.","燒機測試下午 5 點結束。"],["M","If the customer call starts *at 5 PM* our time, it will be early morning in the US.","客戶會議若在我們這邊 5 點開始，美國那邊是清晨。"]],
+ [["M","The parts will arrive *at noon*, so we can start the build after lunch.","零件中午到，午餐後就能開始 build。"],["S","We stopped the line *at noon* because the screws didn't match the drawing.","螺絲和圖面不符，我們中午停線。"]],
+ [["S","The thermal test runs *at night* when the lab is quiet.","散熱測試在晚上實驗室安靜時跑。"],["M","I often answer emails *at night* because the US team is awake then.","我常晚上回信，因為美國團隊那時醒著。"]],
+ [["L","My flight lands *at midnight*.","我的班機午夜降落。"],["M","Please upload the files before 12, because the system closes *at midnight*.","請 12 點前上傳檔案，系統午夜關閉。"]],
+ [["L","I left my laptop *at home*, so I can't open the 3D file.","我把筆電放在家，打不開 3D 檔。"],["M","When I work *at home*, I join the morning meeting by video.","在家工作時，我用視訊參加早會。"]],
+ [["L","I'm still *at work*. I'll be home late.","我還在公司，會晚點回家。"],["S","I had a problem *at work* today: the cable was 10 mm too short.","今天工作上遇到問題：cable 短了 10 mm。"]],
+ [["L","The factory bus picks us up *at the station* at 8.","工廠接駁車 8 點在車站接我們。"],["L","Let's meet *at the station* so we can take the high-speed rail to the factory together.","在車站見，一起搭高鐵去工廠。"]],
+ [["L","I waited *at the bus stop* for 20 minutes.","我在公車站等了 20 分鐘。"],["L","There is a coffee shop near the factory, right *at the bus stop*.","工廠附近公車站旁就有一家咖啡店。"]],
+ [["S","Leave the sample box *at the door* of the lab.","把樣品箱放在實驗室門口。"],["M","The security guard *at the door* will check your visitor badge.","門口警衛會檢查你的訪客證。"]],
+ [["S","The label is *at the rear side*.","標籤在後側。"],["S","Because the cables are *at the rear side*, the service area at the front stays clean.","cable 都在後側，前面的維修區就保持乾淨。"]],
+ [["S","The new samples will ship *on Monday*.","新樣品週一出貨。"],["M","If we get the test report *on Monday*, we can still meet the Friday deadline.","週一拿到測試報告的話，仍能趕上週五截止。"]],
+ [["M","The design freeze is *on May 15th*.","設計凍結日是 5 月 15 日。"],["M","Because tooling starts *on May 15th*, all drawing changes must be done before that day.","模具 5 月 15 日開始，所有圖面變更必須在那之前完成。"]],
+ [["L","My team gave me a cake *on my birthday*.","生日那天團隊送我蛋糕。"],["L","I had to fly to the US *on my birthday*, so we celebrated a week later.","生日那天我得飛美國，所以晚一週才慶祝。"]],
+ [["S","Put the samples *on the table*, not on the floor.","樣品放桌上，不要放地上。"],["S","Before the drop test, we put the unit *on the table* and measured all the gaps.","落摔前把機台放桌上量所有間隙。"]],
+ [["L","There is a big clock *on the wall* in the meeting room.","會議室牆上有大時鐘。"],["S","The safety rules are *on the wall*, so everyone can read them before entering the lab.","安全規則貼在牆上，進實驗室前大家都能看到。"]],
+ [["M","Please look at the table *on page 5* of the report.","請看報告第 5 頁的表格。"],["M","The stack-up result *on page 5* shows the worst case is only 0.1 mm.","第 5 頁的公差疊加結果顯示最差狀況只有 0.1 mm。"]],
+ [["L","I learned some English from shows *on TV*.","我從電視節目學了些英文。"],["L","I saw a news report *on TV* about new AI data centers in Taiwan.","我在電視上看到台灣新 AI 資料中心的新聞。"]],
+ [["S","The chip is *on the PCBA*.","晶片在 PCBA 上。"],["S","The tall capacitor *on the PCBA* is very close to the top cover, so check the clearance.","PCBA 上的高電容很靠近上蓋，請確認間隙。"]],
+ [["M","We will start the DVT build *in April*.","我們四月開始 DVT build。"],["M","If the customer approves the design *in April*, mass production can start in July.","客戶若四月核准設計，七月就能量產。"]],
+ [["S","Our company will launch a new L11 rack *in 2026*.","公司 2026 年會推出新的 L11 機櫃。"],["M","*In 2026*, more customers are asking for liquid cooling in their racks.","2026 年有更多客戶要求機櫃使用液冷。"]],
+ [["M","Let's have the design review *in the morning*.","設計審查早上開吧。"],["S","*In the morning*, the lab is cold, so we wait for the room to warm up before testing.","早上實驗室很冷，我們等室溫上來再測。"]],
+ [["S","Please don't eat *in the room* where we test the PCBA.","測 PCBA 的房間請不要吃東西。"],["M","Can everyone *in the room* see the screen, or should I make the font bigger?","會議室裡大家都看得到螢幕嗎？要不要放大字？"]],
+ [["M","Our office is *in Taipei*, but the factory is in Taoyuan.","我們辦公室在台北，工廠在桃園。"],["M","The customer team will stay *in Taipei* for three days for the design review.","客戶團隊會在台北待三天參加設計審查。"]],
+ [["S","Don't leave the samples *in the car*. It gets very hot.","別把樣品放車上，會很熱。"],["L","I listen to English podcasts *in the car* on my way to work.","上班途中我在車上聽英文 podcast。"]],
+ [["S","Each sample comes *in a box* with a label.","每個樣品都裝在有標籤的盒子裡。"],["S","Please pack the failed parts *in a box* and write the failure mode on the outside.","請把失效零件裝箱，並在外面寫失效模式。"]],
+ [["S","The fans are *in the chassis*.","風扇在機箱裡。"],["S","Hot air stays *in the chassis* if the cables block the airflow path.","如果 cable 擋住風流路徑，熱風會留在機箱內。"]]],
+bfw:[
+ [["L","It takes 40 minutes to get to the office *by bus*.","搭公車到公司要 40 分鐘。"],["L","When it rains, I go to work *by bus* instead of by scooter.","下雨時我改搭公車上班，不騎機車。"]],
+ [["L","It's faster to go to Hsinchu *by train*.","搭火車去新竹比較快。"],["M","We'll send the urgent samples *by train*, because the courier can't deliver until tomorrow.","急件樣品用火車送，因為快遞明天才能送到。"]],
+ [["S","I set up the test fixture *by myself*.","我自己架設測試治具。"],["S","It's hard to install the 30 kg chassis *by myself*, so I need one more person.","自己裝 30 公斤的機箱很難，我需要多一個人。"]],
+ [["M","Sorry, I sent the old drawing *by mistake*.","抱歉，我不小心寄了舊圖。"],["S","Someone used M3 x 8 screws *by mistake*, so the screws touched the PCBA.","有人不小心用了 M3 x 8 螺絲，結果碰到 PCBA。"]],
+ [["L","I need the book *by Friday*.","我週五前需要這本書。"],["M","If we don't get the material data *by Friday*, the simulation will be delayed one week.","週五前拿不到材料數據，模擬會延後一週。"]],
+ [["M","I have a question *for you* about the BOM.","我有個 BOM 的問題要問你。"],["M","I made a short summary *for you*, so you don't need to read the whole report.","我幫你做了摘要，你不用看整份報告。"]],
+ [["M","The meeting lasted *for two hours*.","會議開了兩小時。"],["S","We ran the fan at full speed *for two hours* to check the vibration on the HDD.","風扇全速跑兩小時，檢查硬碟振動。"]],
+ [["L","My neighbor's car is *for sale*.","鄰居的車在賣。"],["M","This model is no longer *for sale*, so we need to find a new part.","這型號已經停售，我們得找新零件。"]],
+ [["L","We had beef noodles *for dinner*.","我們晚餐吃牛肉麵。"],["M","The customer invited our team *for dinner* after the successful build.","build 順利後，客戶請我們團隊吃晚餐。"]],
+ [["M","This file is *for the review*.","這個檔案是審查要用的。"],["S","We need three more samples *for the review*, because the customer wants to check the assembly.","審查還需要三個樣品，因為客戶要看組裝。"]],
+ [["L","I practice English *with friends* every Saturday.","我每週六和朋友練英文。"],["L","I went to Japan *with friends* last year, and I had to speak English all the time.","去年和朋友去日本，一直都得講英文。"]],
+ [["S","Mark the scratch *with a pen* so we can find it later.","用筆標出刮傷，之後才找得到。"],["S","Please don't write on the sample *with a pen*. Use a label instead.","請不要用筆在樣品上寫字，改用標籤。"]],
+ [["L","She makes lunch for her kids *with love*.","她用愛為孩子做午餐。"],["L","My kids always sign their birthday cards to me *with love*.","孩子給我的生日卡片都會寫「with love（愛你）」。"]],
+ [["L","Speak *with confidence*.","說話要有自信。"],["M","After practicing three times, I presented the root cause *with confidence*.","練習三次後，我很有自信地報告根本原因。"]],
+ [["S","I work *with a torque driver* every day.","我每天都用扭力起子工作。"],["S","If you tighten the screw *with a torque driver* set too high, the boss may crack.","扭力起子設太高鎖螺絲，螺絲柱可能會裂。"]]],
+fta:[
+ [["M","The new project manager is *from Bangalore*, and she speaks very fast.","新 PM 來自班加羅爾，講話很快。"],["M","Engineers *from Bangalore* will join our call to review the firmware and mechanical issues.","班加羅爾的工程師會加入會議，檢討韌體和機構問題。"]],
+ [["L","I pick my son up *from school* on Wednesdays.","我週三接兒子放學。"],["L","Some of the English I learned *from school* is useful, but meeting English is very different.","學校學的英文有些有用，但會議英文很不一樣。"]],
+ [["L","*From today*, I will study English every day.","從今天起我每天念英文。"],["S","*From today*, all new brackets must pass the salt spray test before release.","從今天起，所有新 bracket 發行前都要通過鹽霧測試。"]],
+ [["L","I heard about this English app *from my friend*.","我從朋友那聽說這個英文 App。"],["S","I got some good advice *from my friend* about designing snap fits for plastic parts.","我從朋友那得到塑膠件卡勾設計的好建議。"]],
+ [["S","The box is *from the supplier*.","這箱是供應商送來的。"],["M","We are still waiting for the 8D report *from the supplier* about the flatness problem.","我們還在等供應商關於平面度問題的 8D 報告。"]],
+ [["L","I walk my daughter *to school* before work.","上班前我陪女兒走路上學。"],["L","When I was young, I rode my bike *to school* even on rainy days.","小時候即使下雨我也騎腳踏車上學。"]],
+ [["M","Please send the file *to me* by email.","請用 email 把檔案寄給我。"],["M","If the supplier has any questions about the drawing, they can come *to me* directly.","供應商若有圖面問題，可以直接來找我。"]],
+ [["L","It takes me 15 minutes to walk *to work*.","我走路上班要 15 分鐘。"],["L","Since I started walking *to work*, I feel less tired in the afternoon.","開始走路上班後，下午比較不累。"]],
+ [["M","Our manager will fly *to Delhi* to meet the customer.","主管會飛德里見客戶。"],["M","Before we fly *to Delhi* for the build, we must ship the fixtures one week early.","飛德里 build 前，治具必須提早一週寄出。"]],
+ [["M","I sent it *to the customer*.","我寄給客戶了。"],["M","Before we send the drawing *to the customer*, let's check the notes and the revision table.","寄圖給客戶前，先檢查註解和版次表。"]],
+ [["L","My coworkers like to talk *about movies* during lunch.","同事午餐時喜歡聊電影。"],["L","Talking *about movies* with foreign coworkers is an easy way to practice English.","和外國同事聊電影是練英文的簡單方法。"]],
+ [["L","My son reads books *about space* before bed.","我兒子睡前看太空的書。"],["S","I read an article *about space* servers that use special cooling systems.","我讀到一篇關於太空伺服器使用特殊散熱系統的文章。"]],
+ [["M","I'm not sure yet. Can I think *about it* tonight?","我還不確定，今晚想一想好嗎？"],["M","The idea sounds good, but let's think *about it* more before we change the tooling.","點子聽起來不錯，但改模前再多想想。"]],
+ [["L","This app helps me learn *about English* phrases.","這個 App 幫我學英文片語。"],["M","I want to learn more *about English* for meetings, not only grammar.","我想多學會議英文，不只是文法。"]],
+ [["M","Let's talk *about the noise*.","我們談談噪音。"],["S","The customer complained *about the noise issue*, so we added rubber pads to the fans.","客戶抱怨噪音問題，所以我們在風扇加了橡膠墊。"]]],
+uob:[
+ [["S","There are some screws *under the table*. Please pick them up.","桌子下有些螺絲，請撿起來。"],["S","We put the power cables *under the table* so nobody trips over them.","把電源線放桌下，免得有人絆倒。"]],
+ [["L","I keep my suitcase *under the bed*.","我把行李箱放床下。"],["L","My son hid his phone *under the bed* so he could play games at night.","兒子把手機藏在床下，晚上偷玩遊戲。"]],
+ [["L","There is a bike path *under the bridge*.","橋下有條腳踏車道。"],["L","We stopped *under the bridge* because it suddenly started to rain.","突然下雨，我們在橋下躲雨。"]],
+ [["L","I'm *under pressure* at work.","我工作壓力很大。"],["M","When we work *under pressure*, it's easy to skip checks, so please follow the checklist.","在壓力下工作很容易漏檢，請照檢查表做。"]],
+ [["S","There is a gap *under the PCBA*.","PCBA 下方有間隙。"],["S","The standoffs *under the PCBA* must be the same height, or the board will bend.","PCBA 下方的支撐柱高度要一致，否則板子會彎。"]],
+ [["L","There is a big light *over the table* in our meeting room.","會議室桌子上方有一盞大燈。"],["S","We hung a camera *over the table* to record the assembly process.","我們在桌子上方掛相機，錄下組裝過程。"]],
+ [["L","I walk *over the bridge* to get to the factory.","我走過橋去工廠。"],["L","The truck with our racks couldn't go *over the bridge* because it was too heavy.","載機櫃的卡車太重，不能過橋。"]],
+ [["M","The supplier will fix the tooling *over the weekend*.","供應商週末會修模。"],["M","Can you think about the two options *over the weekend* and tell me your choice on Monday?","你週末可以想想兩個方案，週一告訴我選哪個嗎？"]],
+ [["L","My English got better *over the years*.","這些年我的英文進步了。"],["S","*Over the years*, servers have become heavier, so rails and racks need stronger designs.","這些年伺服器越來越重，滑軌和機櫃需要更強的設計。"]],
+ [["S","Don't put the box *over the cable*.","不要把箱子壓在 cable 上。"],["S","If the top cover presses *over the cable*, the cable may get damaged during vibration.","上蓋若壓在 cable 上，振動時 cable 可能受損。"]],
+ [["L","It's windy *between the buildings*.","建築物之間風很大。"],["S","The company built a bridge *between the buildings* so we can move racks easily.","公司在兩棟建築之間蓋了天橋，方便搬機櫃。"]],
+ [["L","This is just *between you and me*.","這只是你我之間的事。"],["M","*Between you and me*, I don't think the supplier can meet the new schedule.","私下說，我不認為供應商能趕上新時程。"]],
+ [["M","The customer call is *between 9 and 10* tomorrow.","客戶會議明天 9 到 10 點之間。"],["S","The truck will arrive *between 9 and 10*, so please clear the loading area before that.","卡車 9 到 10 點到，請在那之前清空卸貨區。"]],
+ [["L","I have to choose *between two choices*.","我得在兩個選擇中挑一個。"],["M","Choosing *between two choices* is easier when we compare cost, weight, and risk in one table.","用一張表比較成本、重量和風險，二選一就容易多了。"]],
+ [["S","There is a wall *between the two fans*.","兩顆風扇之間有隔板。"],["S","Without a divider *between the two fans*, hot air may flow back and reduce cooling.","兩顆風扇之間若沒隔板，熱風可能回流，降低散熱效果。"]]],
+np1:[
+ [["M","You stayed late to help me with the test. I really *appreciate it*.","你留下來幫我測試，真的很感謝。"],["M","Thanks for sharing the old failure data with our team. We *appreciate it*, and it saved us a week.","謝謝分享舊失效數據，很感謝，幫我們省了一週。"]],
+ [["M","A: Thanks for checking the BOM. B: *Anytime.* Just send it to me.","A：謝謝檢查 BOM。B：隨時，寄給我就好。"],["M","A: Your stack-up tips really helped. B: *Anytime.* Let me know if you get stuck again.","A：你的公差建議很有幫助。B：隨時，卡住再跟我說。"]],
+ [["M","A: Sorry, I forgot to send the file. B: *No worries.* Send it when you can.","A：抱歉忘了寄檔。B：沒關係，有空再寄。"],["M","A: I'm sorry the samples are one day late. B: *No worries.* We can still finish the test on time.","A：抱歉樣品晚一天。B：沒關係，我們還是能準時測完。"]],
+ [["S","A: So we need a longer cable? B: *Exactly*, about 20 mm longer.","A：所以要更長的 cable？B：沒錯，大約長 20 mm。"],["M","A: The problem isn't the screw, it's the boss height. B: *Exactly.* That's why we should fix the tooling.","A：問題不是螺絲，是螺絲柱高度。B：沒錯，所以應該修模。"]],
+ [["M","A: Please use the new revision. B: *Got it*, thanks.","A：請用新版次。B：了解，謝謝。"],["M","*Got it.* I'll change the hole size to 3.2 mm and send you the updated drawing this afternoon.","了解，我把孔徑改成 3.2 mm，下午寄更新的圖給你。"]],
+ [["L","A: Where is my phone? B: *No idea.*","A：我手機在哪？B：不知道。"],["M","I have *no idea* why the noise only happens at 60% fan speed, so let's test more units.","我完全不知道為什麼噪音只在 60% 轉速出現，多測幾台吧。"]],
+ [["L","After three days of builds, *I'm beat*.","連續三天 build，我累壞了。"],["L","*I'm beat*, but I still want to practice English for 15 minutes before I sleep.","我累壞了，但睡前還是想練 15 分鐘英文。"]],
+ [["L","We skipped lunch for the test, so *I'm starving*.","為了測試沒吃午餐，我餓扁了。"],["M","*I'm starving*. Can we take a break and order some food before we continue?","我餓扁了，可以休息一下點餐再繼續嗎？"]],
+ [["M","Sorry, *I'm tied up*.","抱歉，我走不開。"],["M","*I'm tied up* with the customer audit all day, so please ask Kevin about the drawing.","我整天被客戶稽核綁住，圖面的事請問 Kevin。"]],
+ [["M","*Hang on*, I can't hear you. Let me check my microphone.","等一下，我聽不到你，我檢查一下麥克風。"],["S","*Hang on*. Before you close the cover, let me check that the cable isn't pinched.","等一下，蓋上蓋子前讓我確認 cable 沒被夾到。"]],
+ [["S","*Watch out* for the cable on the floor.","小心地上的 cable。"],["S","*Watch out* when you pull the server out of the rack, because it's heavier than it looks.","從機櫃拉出伺服器時要小心，它比看起來重。"]],
+ [["L","*Come on*, you can do it!","加油，你做得到！"],["M","*Come on*, we talked about this last week. We need to decide today.","拜託，這上週就談過了，今天必須決定。"]],
+ [["L","You worked late all week. *Take it easy* this weekend.","你整週加班，週末放輕鬆吧。"],["M","*Take it easy*. One failed sample doesn't mean the whole design is wrong.","放輕鬆，一個樣品失效不代表整個設計錯了。"]],
+ [["L","Can you *keep it down*? The baby is sleeping.","可以小聲點嗎？寶寶在睡。"],["M","Could you guys *keep it down* a little? I'm on a call with the customer.","你們可以小聲一點嗎？我在跟客戶通話。"]],
+ [["L","Why don't you *come over* for dinner on Saturday?","週六來我家吃晚餐吧？"],["S","When you have time, please *come over* to the lab and check the new sample with me.","有空請來實驗室和我一起看新樣品。"]],
+ [["M","Please *have a seat*. Can I get you some water?","請坐，要喝水嗎？"],["M","*Have a seat* anywhere you like. We'll start after everyone joins online.","隨便坐，線上的人都加入後就開始。"]],
+ [["M","*Come on in*. We're just setting up the projector.","進來吧，我們正在架投影機。"],["S","*Come on in* and take a look. The new rack is already installed.","進來看看吧，新機櫃已經裝好了。"]],
+ [["L","*Hang tight.* I'm coming.","等一下，我來了。"],["M","*Hang tight*. The supplier is checking the stock, and they'll call us back in ten minutes.","稍等，供應商在查庫存，十分鐘內回電。"]],
+ [["S","*Let me know* if the screw doesn't fit.","螺絲裝不上請跟我說。"],["M","*Let me know* which option you prefer, and I'll update the 3D model tonight.","告訴我你偏好哪個方案，我今晚更新 3D。"]],
+ [["M","If the line stops, *give me a call* right away.","產線停了請馬上打給我。"],["M","*Give me a call* after you talk to the supplier, so we can decide the next step together.","和供應商談完打給我，我們一起決定下一步。"]]],
+np2:[
+ [["M","I have another meeting now. *Catch you later*.","我現在有另一個會，待會見。"],["M","I'll send the summary after lunch. *Catch you later* in the design review.","午餐後寄摘要，設計審查時見。"]],
+ [["M","A: Is the meeting room ready? B: Yes, we're *all set*.","A：會議室好了嗎？B：好了，都準備好了。"],["S","Once the cables are labeled and the fixtures are calibrated, we'll be *all set* for the build.","cable 貼好標籤、治具校正完，build 就都準備好了。"]],
+ [["L","We're *heading out* for lunch. Do you want to come?","我們要去吃午餐，要一起嗎？"],["M","I'm *heading out* to the factory now, so I'll join the call from my phone.","我正要去工廠，會用手機加入會議。"]],
+ [["L","Sorry, *I'm lost*.","抱歉，我聽不懂。"],["M","*I'm a bit lost* on the new process. Could you explain it again with an example?","新流程我有點搞不清楚，可以用例子再解釋一次嗎？"]],
+ [["M","*No way!* The customer wants the samples next week?","不會吧！客戶下週就要樣品？"],["M","There's *no way* we can finish the tooling in two weeks. We need at least five.","兩週不可能完成模具，至少要五週。"]],
+ [["L","Thanks, *that'll do*.","謝謝，這樣就好。"],["S","We don't need a perfect simulation for this bracket. A quick check *will do*.","這個 bracket 不需要完美模擬，快速檢查就夠了。"]],
+ [["M","I'll give you 100 more ECNs. *Just kidding!*","我再給你 100 個 ECN，開玩笑的！"],["M","*Just kidding* about the deadline. You still have until next Friday.","截止日是開玩笑的，你到下週五都還有時間。"]],
+ [["L","*Don't sweat it.* It's OK.","別在意，沒事。"],["M","*Don't sweat it*. The scratch is on the inside, so the customer won't see it.","別擔心，刮傷在內側，客戶看不到。"]],
+ [["S","Changing the screw length is a *piece of cake*.","改螺絲長度小菜一碟。"],["S","Once you understand the stack-up method, this kind of problem is a *piece of cake*.","懂了公差疊加方法後，這種問題就小菜一碟。"]],
+ [["L","The hotel is nice, but *it's pricey*.","這飯店不錯，但有點貴。"],["M","Aluminum would be lighter, but *it's pricey*, so let's compare it with steel first.","鋁比較輕但有點貴，先和鋼材比較一下。"]],
+ [["L","This question is *tricky*.","這題有點棘手。"],["S","*It's tricky* to keep the 0.5 mm gap because both the sheet metal and the plastic have tolerances.","要維持 0.5 mm 間隙很棘手，因為鈑金和塑膠都有公差。"]],
+ [["M","You finished the drawing already? *Awesome*, thanks!","圖已經畫完了？太棒了，謝謝！"],["M","*Awesome* work, everyone. The customer passed all our samples in the first round.","大家做得太棒了，客戶第一輪就通過所有樣品。"]],
+ [["L","The food at that hotel was *awful*.","那間飯店的食物很難吃。"],["S","The paint quality on the first batch was *awful*, so we sent all of it back to the supplier.","第一批烤漆品質很糟，全部退回供應商。"]],
+ [["L","I'm *exhausted* after the long flight.","長途飛行後我累壞了。"],["M","The team is *exhausted* after two weeks of overtime, so let's not plan anything this weekend.","團隊加班兩週累垮了，這週末別安排事情。"]],
+ [["L","The meeting went over time, and now I'm *starving*.","會議超時，現在我餓扁了。"],["S","We were *starving* after the 10-hour build, so we ate at the night market.","10 小時 build 後我們餓扁了，去夜市吃東西。"]],
+ [["L","I'm *thrilled*!","我超開心！"],["M","We're *thrilled* that the customer chose our design for their next-generation rack.","客戶選我們的設計做下一代機櫃，我們超開心。"]],
+ null, // removed: Swamped
+ [["M","A: Do you want to review it now? B: *Maybe later*. I'm busy.","A：要現在看嗎？B：晚點吧，我在忙。"],["M","That's a good idea, but *maybe later*. Let's fix the cable problem first.","好主意，但晚點再說，先解決 cable 問題。"]],
+ [["M","A: I'm two minutes late. B: *No biggie*.","A：我晚了兩分鐘。B：小事。"],["S","A: I used the wrong label on one box. B: *No biggie*, just replace it before shipping.","A：有一箱貼錯標籤。B：小事，出貨前換掉就好。"]],
+ [["L","Tell me. *I'm all ears.*","說吧，我洗耳恭聽。"],["M","If anyone has an idea to reduce the weight by 1 kg, *I'm all ears*.","如果有人有減重 1 公斤的點子，我洗耳恭聽。"]]],
+hotel:[
+ [["L","Good evening. *I have a reservation under* my company's name for three nights.","晚安，我用公司名稱訂了三晚。"],["M","*I have a reservation under* Lin, but my coworker will also stay in the same room.","我用 Lin 的名字訂房，但同事也會住同一間。"]],
+ [["M","*I'm here to* see Mr. Brown. We have a meeting at 10.","我來找 Brown 先生，我們 10 點有會。"],["S","*I'm here to* support the build, so could you show me where the test area is?","我來支援 build，可以帶我看測試區在哪嗎？"]],
+ [["L","*What time does* breakfast *start*?","早餐幾點開始？"],["S","*What time does* the night shift *start*? I want to check the first units they build.","夜班幾點開始？我想檢查他們組的第一批機台。"]],
+ [["L","*What time is check-out*? Can I stay until noon?","幾點退房？可以待到中午嗎？"],["L","*What time is check-out*? My flight is late, so I may need to leave my bags.","幾點退房？我班機很晚，可能需要寄放行李。"]],
+ [["L","*Could I take a look at* the room before I pay?","付款前我可以看一下房間嗎？"],["M","*Could I take a look at* the inspection report before we sign off on the samples?","簽核樣品前，我可以看一下檢驗報告嗎？"]],
+ [["L","*Does the room include* breakfast?","房間含早餐嗎？"],["M","*Does the quote include* the tooling cost, or is that a separate charge?","報價含模具費嗎？還是另外收費？"]],
+ [["L","*Is* breakfast *included*?","有含早餐嗎？"],["M","*Is* shipping to the US *included* in this price, or do we need to pay extra?","這個價格含寄到美國的運費嗎？還是要另外付？"]],
+ [["M","*What's the* password for the meeting room screen?","會議室螢幕的密碼是什麼？"],["M","*What's the* best way to send you big 3D files, email or a shared folder?","寄大型 3D 檔給你最好的方式是什麼，email 還是共用資料夾？"]],
+ [["S","*Where's the* test report for unit #5?","5 號機的測試報告在哪？"],["S","*Where's the* latest drawing? I can only find revision B on the server.","最新圖在哪？伺服器上我只找得到 B 版。"]],
+ [["L","*How do I get to* the train station *from here*?","從這裡怎麼去火車站？"],["L","*How do I get to* the factory *from here* if I don't have a car?","沒車的話，從這裡怎麼去工廠？"]],
+ [["L","*Is there* a convenience store *nearby*?","附近有便利商店嗎？"],["L","*Is there* a quiet coffee shop *nearby* where I can work on my laptop?","附近有安靜的咖啡店可以用筆電工作嗎？"]],
+ [["L","*Could I get an extra* key?","可以多一把鑰匙嗎？"],["M","*Could I get an extra* copy of the drawing for the line leader?","可以多給一份圖面給產線組長嗎？"]],
+ [["L","*Could I get a late checkout*?","可以晚點退房嗎？"],["L","*Could I get a late checkout*? The customer meeting ends at 1, and I want to change clothes.","可以晚點退房嗎？客戶會議 1 點結束，我想換衣服。"]],
+ [["L","*Can I leave my bags here for a while*? I'll be back at 5.","行李可以先放這裡嗎？我 5 點回來。"],["S","*Can I leave* the fixtures *here for a while* until the shipping company picks them up?","治具可以先放這裡，等貨運來收嗎？"]],
+ [["L","The room is *a little too* hot.","房間有點太熱。"],["S","The screw is *a little too* long, so it touches the PCBA when we tighten it.","螺絲有點太長，鎖緊時會碰到 PCBA。"]],
+ [["L","The TV in my room *isn't working*.","我房間的電視壞了。"],["M","The video link *isn't working*, so I'll share my screen with another tool.","視訊連結無法用，我改用別的工具分享螢幕。"]],
+ [["L","*Could I get some extra* pillows?","可以多給些枕頭嗎？"],["S","*Could I get some extra* samples? We need five more for the vibration test.","可以多給一些樣品嗎？振動測試還需要五個。"]],
+ [["L","*Could someone give me a hand* with my luggage?","有人能幫我拿行李嗎？"],["S","*Could someone give me a hand* holding the rail while I tighten the screws?","我鎖螺絲時，有人能幫我扶一下滑軌嗎？"]],
+ [["L","*I'm ready to check out*. Here is my key card.","我要退房了，這是房卡。"],["M","*I'm ready to* present the test results whenever everyone has joined.","大家到齊我就可以報告測試結果。"]],
+ [["L","*Thanks for your help!* The room is great.","謝謝幫忙！房間很棒。"],["M","*Thanks for your help* with the failure analysis. We found the root cause much faster.","謝謝協助失效分析，我們更快找到根本原因。"]]],
+qa1:[
+ [["M","A: How are you today? B: *Not too bad.* A little tired from the build.","A：今天好嗎？B：還不錯，build 有點累。"],["M","A: How are you doing? B: *Can't complain.* The project is busy, but everything is on schedule.","A：你好嗎？B：沒什麼好抱怨的，專案很忙但進度正常。"]],
+ [["L","A: Hey, what's up? B: *Same as always.* Lots of meetings.","A：嘿，怎樣？B：老樣子，很多會。"],["S","A: What's up? B: *Not much*, just checking the clearance between the cable and the heatsink.","A：在幹嘛？B：沒什麼，在檢查 cable 和散熱片的間隙。"]],
+ [["L","A: What are you doing this weekend? B: *Running errands*, and maybe a movie.","A：週末做什麼？B：辦些雜事，可能看場電影。"],["S","A: What are you doing? B: *Finishing some work* on the stack-up before I send it to the customer.","A：在做什麼？B：寄給客戶前在完成公差疊加。"]],
+ [["M","A: Are you busy? B: *Not really.* What do you need?","A：在忙嗎？B：還好，需要什麼？"],["M","A: Are you busy right now? B: *A little*, but I'll be free after this call, around 3.","A：現在忙嗎？B：有點，但這通電話後大約 3 點有空。"]],
+ [["L","A: Where are you? B: *I'm nearby.* See you in five minutes.","A：你在哪？B：在附近，五分鐘後見。"],["S","A: Where are you? The samples just arrived. B: *I'm on my way* back from the supplier. *Almost there.*","A：你在哪？樣品剛到。B：正從供應商那回來，快到了。"]]],
+qa2:[
+ [["S","A: Can you help me move this rack? B: *Of course.*","A：能幫我搬這個機櫃嗎？B：當然。"],["M","A: Can you help me review the DFM report? B: *Absolutely.* Send it over and I'll check it this afternoon.","A：能幫我看 DFM 報告嗎？B：當然，寄過來我下午看。"]],
+ [["M","A: Are you ready to present? B: *Ready to go.*","A：準備好報告了嗎？B：準備好了。"],["S","A: Are you ready for the customer build? B: *I'm all set.* The fixtures and spare parts are packed.","A：準備好客戶 build 了嗎？B：都好了，治具和備品都打包了。"]],
+ [["M","A: What do you think of the new schedule? B: *Sounds good* to me.","A：新時程你覺得呢？B：我覺得可以。"],["S","A: What do you think about using die-cast instead of sheet metal? B: *I'm not sure.* The cost may be too high.","A：用壓鑄取代鈑金你覺得呢？B：不確定，成本可能太高。"]],
+ [["L","A: Do you like your new job? B: *I love it.*","A：喜歡新工作嗎？B：很喜歡。"],["S","A: Do you like the new rail design? B: *It's okay*, but it's still hard to install with one hand.","A：喜歡新滑軌設計嗎？B：還可以，但單手還是很難裝。"]],
+ [["L","A: See you later. B: *Take care.* Drive safe.","A：再見。B：保重，開車小心。"],["M","A: See you later. B: *Talk soon.* I'll send you the meeting notes tonight.","A：再見。B：再聯絡，我今晚寄會議記錄給你。"]]],
+ww:[
+ [["S","The screw broke *when* I tightened it.","我鎖的時候螺絲斷了。"],["M","I was presenting the test data *when* the customer suddenly asked about the cost.","我在報告測試數據時，客戶突然問起成本。"]],
+ [["S","*While* I was checking the drawing, my coworker was preparing the samples.","我看圖的時候，同事在準備樣品。"],["M","*While* the US team was sleeping, we finished the test and uploaded the report.","美國團隊睡覺時，我們完成測試並上傳報告。"]],
+ [["S","Tell me *when* the parts arrive.","零件到的時候告訴我。"],["M","*When* you finish the stack-up, please send it to me and the PM.","完成公差疊加時，請寄給我和 PM。"]],
+ [["L","Don't use your phone *while* you drive.","開車時別用手機。"],["S","*While* the burn-in test is running, check the temperature every hour.","燒機測試進行中，每小時檢查溫度。"]],
+ [["L","I was happy *when* I passed the test.","考過的時候我很開心。"],["S","The latch broke *when* we pulled the tray out of the chassis too fast.","我們把托盤太快拉出機箱時，卡勾斷了。"]],
+ [["L","I drink coffee *while* I read emails.","我邊看信邊喝咖啡。"],["M","*While* we wait for the customer's reply, let's prepare plan B.","等客戶回覆的同時，我們先準備備案。"]],
+ [["L","*When* I was a child, I liked to build models.","小時候我喜歡做模型。"],["L","*When* I lived in Taichung, I rode a scooter to work.","住台中時，我騎機車上班。"]],
+ [["L","I fell asleep *while* I was watching TV.","我看電視看到睡著。"],["S","My phone rang *while* I was installing the fan.","我裝風扇時電話響了。"]]]
+};
+
+const RAW = [];
+const V = (o) => RAW.push(Object.assign({kind:"verb", set:"verbs"}, o));
+
+V({id:"have", head:"have", title:"Have", zh:"吃喝、洗澡、休息", core:"享受／經歷一段時間的事",
+ items:[
+  ["a drink","喝一杯（常指酒）","","c","get,take",1,"L","Let's *have a drink* after work.","下班後去喝一杯吧。"],
+  ["a bath","泡澡","美式常說 take a bath","c","take",1,"L","I *have a bath* on Sunday nights.","我週日晚上會泡澡。"],
+  ["breakfast","吃早餐","三餐前不加 a；有形容詞才加：a big breakfast","w","get,make",1,"L","I usually *have breakfast* at 7:30.","我通常 7:30 吃早餐。"],
+  ["a rest","休息一下","= take a rest","w","take",2,"S","The test ran for six hours, so the team *had a rest* before the next round.","測試跑了六小時，團隊在下一輪前休息一下。"],
+  ["lunch","吃午餐","have lunch with + 人","w","get,make",2,"M","Can we *have lunch* first and review the drawing at 1:30?","我們先吃午餐，1:30 再 review 圖面好嗎？"],
+  ["a shower","沖澡","美式常說 take a shower","c","take",1,"L","I *have a shower* every morning.","我每天早上沖澡。"]],
+ ladder:[
+  [1,"L","I *have breakfast* at home before work.","我上班前在家吃早餐。"],
+  [1,"S","Let's *have a short rest* before the next test.","下一個測試前先休息一下吧。"],
+  [2,"M","We can *have lunch* together and talk about the new bracket.","我們可以一起吃午餐，順便討論新的 bracket。"],
+  [2,"L","After the long meeting, I *had a coffee* to wake up.","開完長會後，我喝了杯咖啡提神。"],
+  [3,"M","Let's *have a quick discussion* about the fan noise before we *have lunch*.","午餐前我們先快速討論一下風扇噪音。"],
+  [3,"S","If we *have a look* at the drop test data, the corner is clearly the weak point.","看一下落摔測試數據，轉角明顯是弱點。"]],
+ compare:[
+  ["have a shower","take a shower","意思一樣；英式偏 have，美式偏 take"],
+  ["have breakfast","have a big breakfast","三餐不加 a；前面有形容詞才加 a"],
+  ["have a look","take a look","都 = 看一下，會議中都很常用"]]});
+
+V({id:"take", head:"take", title:"Take", zh:"拿取、花時間去做", core:"主動去做一件事（拿、花時間）",
+ items:[
+  ["a break","休息一下","會議最常用","w","have",1,"M","Let's *take a 10-minute break*.","我們休息 10 分鐘。"],
+  ["a look","看一下","take a look at + 東西","w","have",1,"S","Can you *take a look at* this 3D model?","你可以看一下這個 3D 模型嗎？"],
+  ["an exam","參加考試","take = 去考；pass = 考過","c","have",1,"L","My son will *take an exam* next week.","我兒子下週要考試。"],
+  ["a seat","請坐（禮貌）","= Have a seat.","w","have",1,"M","Please *take a seat*. We will start in two minutes.","請坐，我們兩分鐘後開始。"],
+  ["a chance","冒險、賭一把","≠ have a chance（有機會）","w","have",3,"S","We can't *take a chance* with the screw torque. Let's test it again.","螺絲扭力不能賭，我們再測一次。"],
+  ["a photo","拍照","take a photo of + 東西","w","get",2,"S","Please *take a photo of* the scratch and send it to me.","請拍下刮傷照片傳給我。"]],
+ ladder:[
+  [1,"S","Can you *take a look at* my drawing?","你可以看一下我的圖嗎？"],
+  [1,"M","Let's *take a break* and get some coffee.","休息一下，去拿杯咖啡吧。"],
+  [2,"S","Please *take photos* of the scratch from three angles.","請從三個角度拍刮傷照片。"],
+  [2,"L","I *took an English exam* last month, and I passed.","我上個月考了英文，而且過了。"],
+  [3,"S","We shouldn't *take a chance* on the new supplier before the FAI is done.","FAI 完成前，不應該賭在新供應商身上。"],
+  [3,"M","Let's *take a short break* and then *take a closer look* at the stack-up result.","先短暫休息，再仔細看公差疊加結果。"]],
+ compare:[
+  ["take a chance","have a chance","take = 冒險賭一把；have = 有機會"],
+  ["take an exam","pass an exam","take = 去考；pass = 考過"],
+  ["take a seat","have a seat","都 = 請坐，比 Sit down 禮貌"]]});
+
+V({id:"do", head:"do", title:"Do", zh:"執行任務、活動、家事", core:"重點在「做這件事」的過程",
+ items:[
+  ["your work","做你的工作","","w","",1,"L","Please *do your work* first, then we can talk.","先做完你的工作，我們再聊。"],
+  ["nothing","什麼都不做","","c","have,get,make",1,"L","Last weekend I *did nothing*. I just stayed home.","上週末我什麼都沒做，就待在家。"],
+  ["the dishes","洗碗","固定加 the","c","",1,"L","I cook, and my wife *does the dishes*.","我煮飯，太太洗碗。"],
+  ["your hair","弄頭髮","","c","",2,"L","She is *doing her hair*. We'll leave in five minutes.","她在弄頭髮，我們五分鐘後出發。"],
+  ["yoga","做瑜珈","運動類：do yoga / do exercise","c","",1,"L","I *do yoga* twice a week for my back.","我一週做兩次瑜珈保養背部。"],
+  ["a favour","幫個忙","美式拼 favor；do + 人 + a favor","w","",2,"M","Could you *do me a favor* and check the BOM?","可以幫我個忙檢查一下 BOM 嗎？"]],
+ ladder:[
+  [1,"L","I *do yoga* on Mondays and Thursdays.","我週一和週四做瑜珈。"],
+  [1,"M","Can you *do me a favor*?","可以幫我個忙嗎？"],
+  [2,"S","If we *do nothing*, the cable will touch the fan.","如果什麼都不做，cable 會碰到風扇。"],
+  [2,"M","I need to *do my work* first, then I can join the call.","我要先完成手上的工作才能加入會議。"],
+  [3,"S","Could you *do me a favor* and double-check the screw length on the new chassis?","可以幫我再確認新機箱的螺絲長度嗎？"],
+  [3,"S","We *did a lot of rework* this week, so let's find the root cause first.","這週做了很多重工，先找出根本原因吧。"]],
+ compare:[
+  ["do","make","do = 做任務／活動；make = 做出結果或東西"],
+  ["do a test / do rework","make a change / make a decision","執行動作用 do，產生改變用 make"],
+  ["do me a favor","help me","意思接近；do me a favor 較口語、客氣"]]});
+
+V({id:"make", head:"make", title:"Make", zh:"做出結果、產生改變", core:"重點在「產生的結果」",
+ items:[
+  ["a mess","弄得一團亂","","c","",1,"L","The kids *made a mess* in the kitchen.","小孩把廚房弄得一團亂。"],
+  ["a difference","有差別、有影響","make a big difference","w","",2,"S","Adding one rib *makes a big difference* in stiffness.","加一根肋條，剛性差很多。"],
+  ["an effort","努力","make an effort to + V","w","",2,"M","Thanks for *making the effort* to finish the drawing early.","謝謝你努力提早完成圖面。"],
+  ["money","賺錢","= earn money","c","get,have",1,"L","He *makes good money* at his new job.","他新工作賺很多。"],
+  ["a decision","做決定","會議高頻","w","take",1,"M","We need to *make a decision* today.","我們今天要做決定。"],
+  ["the bed","整理床鋪","","c","",1,"L","I *make the bed* every morning.","我每天早上整理床鋪。"]],
+ ladder:[
+  [1,"L","I *make the bed* after I get up.","我起床後整理床鋪。"],
+  [1,"M","We need to *make a decision* today.","我們今天要做出決定。"],
+  [2,"S","A thicker bracket can *make a big difference* in the vibration test.","較厚的 bracket 對振動測試影響很大。"],
+  [2,"S","Please don't *make a mess* on the workbench.","請不要把工作台弄亂。"],
+  [3,"M","If we *make a decision* by Friday, the tooling can start next week.","如果週五前決定，模具下週就能開始。"],
+  [3,"S","The team *made a real effort* to cut cost without changing the airflow.","團隊很努力在不影響風流下降低成本。"]],
+ compare:[
+  ["make","do","make = 產生結果；do = 執行任務"],
+  ["make a decision","take a decision","美式用 make；take 偏英式"],
+  ["make money","earn money","意思一樣；make 較口語"]]});
+
+V({id:"go", head:"go", title:"Go", zh:"離開、前往；變成（常變糟）", core:"移動離開；go + 形容詞 = 變成",
+ items:[
+  ["home","回家","home 前不加 to","c","come,get",1,"L","I usually *go home* at 7.","我通常 7 點回家。"],
+  ["shopping","去購物","go + V-ing 做活動","c","do",1,"L","Let's *go shopping* this weekend.","這週末去逛街吧。"],
+  ["crazy","抓狂、瘋掉","口語；也可表示很興奮","!","",2,"L","My phone keeps ringing. I'm *going crazy*!","電話一直響，我快瘋了！"],
+  ["abroad","出國","abroad 前不加 to","w","",2,"M","I *go abroad* twice a year for customer builds.","我一年出國兩次去客戶端 build。"],
+  ["bankrupt","破產","go + 形容詞（變糟）","w","",3,"S","If the supplier *goes bankrupt*, we need a second source.","如果供應商破產，我們需要第二供應商。"],
+  ["for a walk","去散步","","c","",1,"L","Let's *go for a walk* after lunch.","午餐後去散步吧。"]],
+ ladder:[
+  [1,"L","I *go home* at 7 most days.","我大多 7 點回家。"],
+  [1,"L","Let's *go for a walk* after lunch.","午餐後散個步吧。"],
+  [2,"M","I will *go abroad* next month to visit the customer.","我下個月要出國拜訪客戶。"],
+  [2,"S","If the supplier *goes bankrupt*, we need a second source.","萬一供應商倒閉，我們需要第二來源。"],
+  [3,"S","Our PM almost *went crazy* when the parts arrived two weeks late.","零件晚兩週到，PM 差點抓狂。"],
+  [3,"M","When I *go abroad* for a build, I always bring the latest drawings on my laptop.","出國跟 build 時，我一定把最新圖面帶在筆電裡。"]],
+ compare:[
+  ["go home / go abroad","go to the office","home、abroad 前不加 to"],
+  ["go crazy / go bankrupt","get ready / get lost","go + adj 多半變糟；get + adj 是一般變化"],
+  ["go home","come home","go = 離開這裡；come = 回到說話者所在的地方"]]});
+
+V({id:"come", head:"come", title:"Come", zh:"來、到達；順序與結果", core:"到達；come first / come close 表結果",
+ items:[
+  ["close","差一點、接近","come close to + 目標","w","get",3,"S","We *came close to* the weight target, but we are still 200 g over.","我們接近重量目標，但還超出 200 g。"],
+  ["to an end","結束","be coming to an end = 快結束","w","",2,"S","The EVT stage is *coming to an end*.","EVT 階段快結束了。"],
+  ["early","早到","","w","go,get",1,"M","Please *come early* to set up the room.","請早點來布置會議室。"],
+  ["first","最優先、第一","Safety comes first.","w","go",1,"S","Safety *comes first* in the lab.","實驗室安全第一。"],
+  ["last","最後一名","","c","go",1,"L","Our team *came last* in the game.","我們隊比賽最後一名。"],
+  ["on time","準時（到）","on time 準時；in time 及時","w","",1,"M","The parts didn't *come on time*.","零件沒有準時到。"]],
+ ladder:[
+  [1,"M","Please *come on time* for the meeting.","開會請準時。"],
+  [1,"S","Safety *comes first* in the lab.","實驗室安全第一。"],
+  [2,"S","The EVT stage is *coming to an end* next week.","EVT 下週即將結束。"],
+  [2,"L","I *came early*, so I got a good seat.","我早到，所以搶到好位子。"],
+  [3,"S","If the samples don't *come on time*, we will miss the DVT schedule.","樣品若沒準時到，會趕不上 DVT 時程。"],
+  [3,"M","Quality should *come first*, even when the schedule is tight.","即使時程很趕，品質仍應優先。"]],
+ compare:[
+  ["on time","in time","on time = 準時；in time = 及時（沒有太晚）"],
+  ["come first","go first","come first = 最重要／第一名；go first = 先開始、先講"],
+  ["come close to + 目標","come close","後面接目標時要加 to"]]});
+
+V({id:"get", head:"get", title:"Get", zh:"取得；變成某狀態", core:"get + 形容詞／過去分詞 = 變成",
+ items:[
+  ["pregnant","懷孕","","c","",2,"L","My sister *got pregnant* last year.","我姊姊去年懷孕了。"],
+  ["lost","迷路","Get lost! 也可 = 滾開 ⚠","!","",1,"L","I *got lost* in the factory on my first day.","第一天我在工廠迷路了。"],
+  ["ready","準備好","get ready for + N","w","",1,"M","*Get ready*. The customer is here.","準備好，客戶到了。"],
+  ["started","開始","Let's get started. 開會開場","w","",1,"M","OK, let's *get started*.","好，我們開始吧。"],
+  ["a job","找到工作","","c","take,have",1,"L","He *got a job* at a server company.","他在一家伺服器公司找到工作。"],
+  ["married","結婚","get married to + 人（不用 with）","c","",2,"L","They *got married* in May.","他們五月結婚。"]],
+ ladder:[
+  [1,"M","OK, let's *get started*.","好，我們開始吧。"],
+  [1,"L","I *got lost* on my first day at the factory.","第一天在工廠我迷路了。"],
+  [2,"S","Please *get the samples ready* before the customer visit.","客戶來訪前請準備好樣品。"],
+  [2,"L","My friend *got a job* as a mechanical engineer.","我朋友找到機構工程師的工作。"],
+  [3,"S","Once the tooling is ready, we can *get started* on the first article inspection.","模具好了之後就能開始首件檢驗。"],
+  [3,"M","We need to *get everything ready* for the build, including cables and screws.","build 前要把 cable、螺絲等全部準備好。"]],
+ compare:[
+  ["get ready","be ready","get = 準備的動作；be = 已準備好的狀態"],
+  ["get married","be married","get = 結婚那個動作；be = 已婚狀態"],
+  ["I got lost.","I'm lost.","got lost = 迷路；I'm lost 也可 = 我聽不懂"]]});
+
+V({id:"letme", head:"let me", title:"Let me", zh:"讓我…（主動、禮貌開場）", core:"主動提出要做某事，比 I will 更客氣", noquiz:true,
+ items:[
+  ["know","讓我知道、跟我說","Let me know if…","w","",1,"M","*Let me know* if you have any questions.","有問題跟我說。"],
+  ["think","讓我想想","Let me think about it.","w","",1,"M","*Let me think about it* and get back to you.","我想一下再回覆你。"],
+  ["help you","我來幫你","","w","",1,"L","*Let me help you* with that box.","我幫你搬那個箱子。"],
+  ["go","放開我、讓我走","會議別單獨用；Let me go first. = 我先","!","",1,"L","*Let me go*! You are hurting my arm.","放開我！你弄痛我的手了。"],
+  ["see","我看看、我想一下","思考中的停頓語","w","",1,"M","*Let me see*... the drawing is on page 3.","我看看…圖在第 3 頁。"],
+  ["explain","讓我解釋","會議開場很好用","w","",2,"M","*Let me explain* why we changed the design.","讓我解釋為什麼改設計。"]],
+ ladder:[
+  [1,"M","*Let me know* when you are free.","有空的時候跟我說。"],
+  [1,"M","*Let me think about it* and call you back.","我想一下再打給你。"],
+  [2,"M","*Let me explain* the new screw design in two slides.","我用兩頁說明新的螺絲設計。"],
+  [2,"S","*Let me see*... I think the cable is too short.","我看看…我覺得 cable 太短。"],
+  [3,"S","*Let me know* if the clearance is still under 0.5 mm after you change the bracket.","改完 bracket 後，如果間隙還小於 0.5 mm 請告訴我。"],
+  [3,"M","Before we decide, *let me explain* the risk of using thinner sheet metal.","決定前，讓我說明使用較薄鈑金的風險。"]],
+ compare:[
+  ["Let me see.","Let me know.","see = 我看一下／想一下；know = 你告訴我"],
+  ["Let me go.","Let me go first.","單獨用 = 放開我；go first = 我先"],
+  ["Let me explain.","I will explain.","Let me 更禮貌，像在請求發言"]]});
+
+V({id:"put", head:"put", title:"Put", zh:"放置；穿上、延後", core:"put on 穿上／增加；put off 延後",
+ items:[
+  ["on weight","變胖","= gain weight","c","",2,"L","I *put on weight* after the holidays.","放假後我變胖了。"],
+  ["on a jacket","穿上外套","put on = 穿的動作；wear = 穿著狀態","c","",1,"L","*Put on a jacket*. The lab is cold.","穿上外套，實驗室很冷。"],
+  ["on makeup","化妝","","c","",1,"L","She *puts on makeup* before work.","她上班前化妝。"],
+  ["off the light","關燈","偏印度／英式；美式工作場合說 turn off the light","!","",1,"L","Please *turn off the light* when you leave the lab.","離開實驗室時請關燈。", true],
+  ["off a meeting","延後會議","= postpone（較正式）","w","",2,"M","Can we *put off the meeting* until Friday?","會議可以延到週五嗎？"],
+  ["in order","整理好、排好順序","put + 東西 + in order","w","get",2,"S","Please *put the parts in order* before the build.","build 前請把零件排好。"]],
+ ladder:[
+  [1,"L","*Put on a jacket*. The server room is cold.","穿上外套，機房很冷。"],
+  [1,"M","Can we *put off the meeting* to Friday?","會議能改到週五嗎？"],
+  [2,"S","Please *put the samples in order* by serial number.","請依序號把樣品排好。"],
+  [2,"L","I *put on 3 kg* this year because I sit all day.","我整天坐著，今年胖了 3 公斤。"],
+  [3,"M","We had to *put off the design review* because the test report was not ready.","測試報告沒好，只好延後設計審查。"],
+  [3,"M","Before the audit, let's *put all the drawings and reports in order*.","稽核前，把所有圖面和報告整理好。"]],
+ compare:[
+  ["put on","put off","on = 穿上／增加；off = 延後"],
+  ["put on a jacket","wear a jacket","put on = 穿的動作；wear = 穿著的狀態"],
+  ["put off a meeting","cancel a meeting","put off = 延後（還會開）；cancel = 取消"]]});
+
+// ---------- 介系詞 ----------
+const P = (o) => RAW.push(Object.assign({kind:"prep", set:"prep"}, o));
+
+P({id:"aoi", title:"at / on / in", zh:"時間與地點：點、面、空間", visual:"zoom", heads:["at","on","in"],
+ core:"at = 一個點；on = 表面／某一天；in = 空間內／一段期間",
+ items:[
+  ["at","5 PM","在下午 5 點","時間點",1,"M","The meeting starts *at 5 PM*.","會議下午 5 點開始。"],
+  ["at","noon","在中午","",1,"L","Let's meet *at noon*.","中午見。"],
+  ["at","night","在晚上","例外：at night，但 in the morning",1,"L","I study English *at night*.","我晚上念英文。"],
+  ["at","midnight","在午夜","",1,"S","The test finished *at midnight*.","測試半夜才跑完。"],
+  ["at","home","在家","",1,"L","I work *at home* on Fridays.","我週五在家工作。"],
+  ["at","work","在上班","",1,"L","I'm *at work* now. Can I call you later?","我在上班，晚點打給你？"],
+  ["at","the station","在車站","把地點當成一個點",1,"L","I'll wait for you *at the station*.","我在車站等你。",true],
+  ["at","the bus stop","在公車站","",1,"L","She is waiting *at the bus stop*.","她在公車站等車。"],
+  ["at","the door","在門口","",1,"L","Someone is *at the door*.","有人在門口。"],
+  ["at","the rear side","在後側","工程：指一個位置點",2,"S","The PSU is *at the rear side* of the chassis.","PSU 在機箱後側。",true],
+  ["on","Monday","在星期一","星期用 on",1,"M","Can we meet *on Monday*?","週一可以開會嗎？"],
+  ["on","May 15th","在 5 月 15 日","日期用 on",1,"S","The DVT build starts *on May 15th*.","DVT build 5 月 15 日開始。"],
+  ["on","my birthday","在我生日那天","特定某一天",1,"L","We had dinner *on my birthday*.","生日那天我們去吃晚餐。"],
+  ["on","the table","在桌上","接觸表面",1,"L","Your keys are *on the table*.","你的鑰匙在桌上。"],
+  ["on","the wall","在牆上","",1,"S","The rack drawing is *on the wall*.","機櫃圖貼在牆上。"],
+  ["on","page 5","在第 5 頁","",1,"M","The tolerance table is *on page 5*.","公差表在第 5 頁。"],
+  ["on","TV","在電視上","",1,"L","I watched the game *on TV*.","我看電視轉播比賽。"],
+  ["on","the PCBA","在 PCBA 上","工程：裝在板子表面",2,"S","There are three connectors *on the PCBA* near the edge.","板邊附近的 PCBA 上有三個連接器。"],
+  ["in","April","在四月","月份用 in",1,"S","Mass production starts *in April*.","四月開始量產。"],
+  ["in","2026","在 2026 年","年份用 in",1,"L","I want to pass the English test *in 2026*.","我想在 2026 年通過英文考試。"],
+  ["in","the morning","在早上","in the morning / afternoon / evening",1,"L","I drink coffee *in the morning*.","我早上喝咖啡。"],
+  ["in","the room","在房間裡","空間內",1,"M","Everyone is *in the room*. Let's start.","大家都到了，開始吧。"],
+  ["in","Taipei","在台北","城市、國家用 in（圖中為 India、Dhaka）",1,"L","I live *in Taipei*.","我住台北。"],
+  ["in","the car","在車裡","小車用 in；bus / train 用 on",1,"L","I left my laptop *in the car*.","我把筆電忘在車上。"],
+  ["in","a box","在盒子裡","",1,"S","Put the spare screws *in a box*.","把備用螺絲放進盒子。"],
+  ["in","the chassis","在機箱內","工程：空間內部",2,"S","There is not enough space *in the chassis* for a longer cable.","機箱內沒有空間放更長的 cable。"]],
+ ladder:[
+  [1,"M","See you *on Monday* *at 9 AM*.","週一早上 9 點見。"],
+  [1,"L","I'm *at home* now, but I'll be *in the office* *in the afternoon*.","我現在在家，下午會進公司。"],
+  [2,"S","The fan module is *in the chassis*, and the label is *on the top cover*.","風扇模組在機箱內，標籤在上蓋上。"],
+  [2,"M","The review is *on May 15th* *at 2 PM* *in Room 3*.","審查在 5 月 15 日下午 2 點，3 號會議室。"],
+  [3,"S","*In 2026*, we plan to build the first L11 rack *in April* and ship it *in June*.","2026 年我們計畫 4 月組第一台 L11 機櫃，6 月出貨。"],
+  [3,"S","Put the warning label *on the rear panel*, not *in the cable area*, so the operator can see it easily.","警告標籤貼在後面板上，不要貼在走線區內，操作員才容易看到。"]],
+ compare:[
+  ["at night","in the morning","固定例外：晚上用 at，早上用 in"],
+  ["on the bus / train","in the car / taxi","可站著走動的大型交通工具用 on；小車用 in"],
+  ["on time","in time","on time = 準時；in time = 及時"]]});
+
+P({id:"bfw", title:"by / for / with", zh:"方法、目的、工具", heads:["by","for","with"],
+ core:"by = 方法／期限；for = 目的／持續多久；with = 一起／用工具",
+ items:[
+  ["by","bus","搭公車","by + 交通工具，不加 the",1,"L","I go to work *by bus*.","我搭公車上班。"],
+  ["by","train","搭火車","",1,"L","We went to the factory *by train*.","我們搭火車去工廠。"],
+  ["by","myself","我自己（獨自）","",1,"L","I fixed it *by myself*.","我自己修好的。",true],
+  ["by","mistake","不小心","",1,"S","I deleted the file *by mistake*.","我不小心刪了檔案。"],
+  ["by","Friday","在週五前（期限）","by = 最晚在…之前完成",2,"M","Please send the drawing *by Friday*.","請週五前寄出圖面。"],
+  ["for","you","給你、為了你","",1,"L","This coffee is *for you*.","這杯咖啡給你。"],
+  ["for","two hours","持續兩小時","for + 一段時間",1,"S","The burn-in test runs *for two hours*.","燒機測試跑兩小時。"],
+  ["for","sale","出售中","",1,"L","The house is *for sale*.","這房子在賣。"],
+  ["for","dinner","當晚餐","",1,"L","What do you want *for dinner*?","晚餐想吃什麼？"],
+  ["for","the review","為了審查","for + 目的",2,"M","I prepared ten slides *for the review*.","我為審查準備了 10 頁。"],
+  ["with","friends","和朋友一起","",1,"L","I went hiking *with friends*.","我和朋友去爬山。"],
+  ["with","a pen","用一支筆","with + 工具",1,"L","Please sign *with a pen*.","請用筆簽名。"],
+  ["with","love","帶著愛","卡片結尾常用",1,"L","*With love*, Mom.","愛你的媽媽。"],
+  ["with","confidence","有自信地","",2,"M","She presented the design *with confidence*.","她很有自信地報告設計。"],
+  ["with","a torque driver","用扭力起子","工程：具體工具用 with",2,"S","Tighten the screws *with a torque driver*.","用扭力起子鎖螺絲。"]],
+ ladder:[
+  [1,"L","I go to work *by bus*.","我搭公車上班。"],
+  [1,"M","Thank you *for your help*.","謝謝你的幫忙。"],
+  [2,"S","Please tighten the screws *with a torque driver*, not *by hand*.","請用扭力起子鎖，不要用手鎖。"],
+  [2,"M","Can you send the report *by Friday*? I need it *for the customer meeting*.","週五前能寄報告嗎？客戶會議要用。"],
+  [3,"S","We ran the vibration test *for two hours* and found a small crack *with a magnifier*.","振動測試跑了兩小時，用放大鏡發現一條小裂痕。"],
+  [3,"M","If we finish the DFM review *by next week*, I can present it *with confidence*.","如果下週前完成 DFM 審查，我就能有自信地報告。"]],
+ compare:[
+  ["by Friday","until Friday","by = 週五前完成；until = 一直持續到週五"],
+  ["by hand","with a tool","方法用 by（不加 a）；具體工具用 with a / the"],
+  ["for two hours","in two hours","for = 持續兩小時；in = 兩小時後"]]});
+
+P({id:"fta", title:"from / to / about", zh:"起點、終點、主題", heads:["from","to","about"],
+ core:"from = 起點／來源；to = 方向／終點；about = 主題",
+ items:[
+  ["from","Bangalore","來自班加羅爾","來源地點",1,"L","My coworker is *from Bangalore*.","我同事來自班加羅爾。"],
+  ["from","school","從學校（回來）","",1,"L","My kids come home *from school* at 4.","孩子 4 點放學回家。"],
+  ["from","today","從今天起","",2,"M","*From today*, please use the new drawing number.","從今天起請用新圖號。"],
+  ["from","my friend","從我朋友那裡","",1,"L","I got this gift *from my friend*.","這禮物是朋友送的。"],
+  ["from","the supplier","來自供應商","",2,"S","The parts *from the supplier* have burrs.","供應商的零件有毛邊。"],
+  ["to","school","去學校","go to school",1,"L","My son goes *to school* by bus.","我兒子搭公車上學。"],
+  ["to","me","到我這裡","come to me",1,"M","If you have questions, come *to me*.","有問題來找我。"],
+  ["to","work","去上班","walk to work",1,"L","I walk *to work* every day.","我每天走路上班。"],
+  ["to","Delhi","到德里","fly to + 地點",1,"L","We will fly *to Delhi* next week.","我們下週飛德里。"],
+  ["to","the customer","給客戶","send + 東西 + to + 人",2,"M","I sent the report *to the customer*.","我把報告寄給客戶了。",true],
+  ["about","movies","關於電影","talk about",1,"L","We talked *about movies* at lunch.","午餐時我們聊電影。"],
+  ["about","space","關於太空","read about",1,"L","I like reading *about space*.","我喜歡讀太空的東西。"],
+  ["about","it","關於這件事","think about it",1,"M","Let me think *about it*.","讓我想想。"],
+  ["about","English","關於英文","learn about",1,"L","I want to learn more *about English* grammar.","我想多學一些英文文法。"],
+  ["about","the noise issue","關於噪音問題","",2,"M","Can we talk *about the noise issue*?","可以談一下噪音問題嗎？"]],
+ ladder:[
+  [1,"L","I walk *to work* every day.","我每天走路上班。"],
+  [1,"M","Let me think *about it*.","讓我想一想。"],
+  [2,"S","The new brackets *from the supplier* will arrive on Tuesday.","供應商的新 bracket 週二會到。"],
+  [2,"M","Can we talk *about the cable routing* after lunch?","午餐後可以談 cable 走線嗎？"],
+  [3,"M","*From next week*, please send all ECN files *to me* and the PM.","從下週起，所有 ECN 檔案請寄給我和 PM。"],
+  [3,"S","We moved the PSU *from the front* *to the rear* to improve airflow.","我們把 PSU 從前面移到後面，改善風流。"]],
+ compare:[
+  ["talk to + 人","talk about + 事","to 接對象；about 接話題"],
+  ["from A to B","from A until B","地點、範圍用 to；時間持續常用 until"],
+  ["think about","think of","about = 仔細考慮；of = 想到、想起"]]});
+
+P({id:"uob", title:"under / over / between", zh:"下方、上方、之間", heads:["under","over","between"],
+ core:"under = 正下方／在…之下；over = 正上方／跨越／一段期間；between = 兩者之間",
+ items:[
+  ["under","the table","在桌子下","",1,"L","The cat is *under the table*.","貓在桌子底下。"],
+  ["under","the bed","在床下","",1,"L","My shoes are *under the bed*.","鞋子在床底下。"],
+  ["under","the bridge","在橋下","",1,"L","We walked *under the bridge*.","我們從橋下走過。",true],
+  ["under","pressure","在壓力下","抽象用法",2,"M","The team is *under pressure* because of the schedule.","因為時程，團隊壓力很大。"],
+  ["under","the PCBA","在 PCBA 下方","",2,"S","There is a mylar sheet *under the PCBA*.","PCBA 下方有一片麥拉片。"],
+  ["over","the table","在桌子上方","不接觸的上方",1,"L","The lamp hangs *over the table*.","燈掛在桌子上方。",true],
+  ["over","the bridge","越過橋","= across",1,"L","We drove *over the bridge*.","我們開車過橋。",true],
+  ["over","the weekend","週末期間","",1,"M","I'll check the data *over the weekend*.","我週末會看數據。"],
+  ["over","the years","這些年來","",2,"L","The design has changed a lot *over the years*.","這些年設計變了很多。"],
+  ["over","the cable","跨過 cable","",2,"S","The bracket goes *over the cable*, so please check the clearance.","bracket 跨在 cable 上方，請確認間隙。"],
+  ["between","buildings","在建築物之間","",1,"L","There is a small park *between the buildings*.","建築之間有個小公園。"],
+  ["between","you and me","你我之間（私下說）","= 別外傳",2,"M","*Between you and me*, the schedule is too tight.","私下說，時程太趕了。"],
+  ["between","9 and 10","9 點到 10 點之間","",1,"M","I'm free *between 9 and 10*.","我 9 到 10 點有空。"],
+  ["between","two choices","在兩個選擇之間","",2,"M","We have to choose *between two choices*: plastic or die-cast.","我們要在塑膠和壓鑄兩個方案中選一個。"],
+  ["between","the two fans","兩顆風扇之間","",2,"S","Keep a 2 mm gap *between the two fans*.","兩顆風扇之間保留 2 mm 間隙。"]],
+ ladder:[
+  [1,"L","My bag is *under the table*.","我的包包在桌子底下。"],
+  [1,"M","I'm free *between 2 and 3*.","我 2 到 3 點有空。"],
+  [2,"S","Please keep a 1.5 mm gap *between the cable and the fan*.","cable 和風扇之間請保持 1.5 mm 間隙。"],
+  [2,"M","I'll review the stack-up *over the weekend*.","我週末會看公差疊加。"],
+  [3,"S","The team is *under pressure*, but we still need to check the cable that goes *over the heatsink*.","團隊壓力很大，但仍要檢查跨過散熱片的 cable。"],
+  [3,"M","*Over the years*, we learned that choosing *between cost and reliability* is the hardest part.","這些年我們學到，在成本和可靠度之間取捨最難。"]],
+ compare:[
+  ["under","below","under = 正下方（常有遮蓋）；below = 位置比較低"],
+  ["over","above","over = 正上方／跨越／覆蓋；above = 位置比較高"],
+  ["between","among","between = 兩者之間；among = 三者以上之中"]]});
+
+// ---------- 道地說法 ----------
+const N = (o) => RAW.push(Object.assign({kind:"pair"}, o));
+
+N({id:"np1", set:"native", title:"Native phrases 1–20", zh:"日常與辦公室短句",
+ core:"把課本句換成母語人士常說的短句。看「正式度」決定能不能對主管或客戶用。",
+ items:[
+  ["Appreciate it.","Thank you.","很感謝","w","比 Thanks 多一點誠意",1,"M","Thanks for checking the drawing so fast. *Appreciate it.*","謝謝你這麼快看圖，很感謝。"],
+  ["Anytime.","You're welcome.","隨時（不客氣）","w","",1,"M","A: Thanks for your help. B: *Anytime.*","A：謝謝幫忙。B：隨時找我。"],
+  ["No worries.","It's okay.","沒關係","w","",1,"M","A: Sorry I'm late. B: *No worries.* We just started.","A：抱歉遲到。B：沒關係，剛開始。"],
+  ["Exactly.","I agree.","沒錯、正是如此","w","",1,"M","A: So the screw is too long? B: *Exactly.*","A：所以是螺絲太長？B：沒錯。"],
+  ["Got it.","I understand.","了解","w","對主管可說 Got it, thanks.",1,"M","*Got it.* I'll update the drawing today.","了解，我今天更新圖面。"],
+  ["No idea.","I don't know.","完全不知道","!","對客戶太直接，改說 I'm not sure. Let me check.",2,"M","A: Why did it fail? B: *No idea* yet. Let me check the data.","A：為什麼失效？B：還不知道，我查一下數據。"],
+  ["I'm beat.","I'm tired.","累壞了","c","",1,"L","*I'm beat.* I'm going to bed.","我累壞了，要去睡了。"],
+  ["I'm starving.","I'm hungry.","餓扁了","c","",1,"L","*I'm starving.* Let's eat.","我快餓死了，去吃吧。"],
+  ["I'm tied up.","I'm busy.","忙到走不開","w","tied up in / with + 事",2,"M","*I'm tied up* in meetings until 3. Can we talk after that?","我開會到 3 點走不開，之後聊好嗎？"],
+  ["Hang on.","Wait.","等一下","w","",1,"M","*Hang on*, let me find the file.","等一下，我找一下檔案。"],
+  ["Watch out.","Be careful.","小心！","w","",1,"S","*Watch out!* The edge is sharp.","小心！邊緣很利。"],
+  ["Come on.","Hurry up.","快點啦／拜託","!","語氣看情況，可能像催促或抱怨",1,"L","*Come on*, we'll miss the train!","快點，要趕不上火車了！"],
+  ["Take it easy.","Relax.","放輕鬆","c","也可當道別：Take it easy!",1,"L","*Take it easy.* It's just a small change.","放輕鬆，只是小改。"],
+  ["Keep it down.","Be quiet.","小聲點","!","有命令感，前面加 please",1,"L","Please *keep it down*. People are working.","請小聲點，大家在工作。"],
+  ["Come over.","Come here.","過來（我這邊）","c","",1,"M","Can you *come over* to my desk? I want to show you something.","可以來我座位一下嗎？想給你看個東西。"],
+  ["Have a seat.","Sit down.","請坐","w","比 Sit down 禮貌",1,"M","Please *have a seat*.","請坐。"],
+  ["Come on in.","Come in.","快進來","w","語氣熱情",1,"L","*Come on in!* The door is open.","進來吧，門開著。"],
+  ["Hang tight.","Wait here.","稍等、撐一下","c","",2,"M","*Hang tight.* I'll share my screen in a second.","稍等，我馬上分享螢幕。"],
+  ["Let me know.","Tell me.","跟我說一聲","w","",1,"M","*Let me know* if you need anything.","需要什麼跟我說。"],
+  ["Give me a call.","Call me.","打給我","w","",1,"M","*Give me a call* when you get the test result.","拿到測試結果打給我。"]],
+ ladder:[
+  [1,"M","*Got it.* I'll send the file today.","了解，我今天寄檔案。"],
+  [1,"L","*I'm starving.* Let's have lunch.","餓扁了，吃午餐吧。"],
+  [2,"M","Sorry, *I'm tied up* right now. Can I *give you a call* at 4?","抱歉現在走不開，4 點打給你好嗎？"],
+  [2,"S","*Watch out.* Don't touch the heatsink. It's still hot.","小心，別碰散熱片，還很燙。"],
+  [3,"M","*Hang on*, I think we're missing one tolerance. *Let me know* if you see it too.","等一下，好像少了一個公差，你也看到的話告訴我。"],
+  [3,"M","*Appreciate it.* Your quick check saved us a lot of time before the build.","很感謝，你的快速檢查讓我們 build 前省了很多時間。"]],
+ compare:[
+  ["Got it.","Understood.","Got it 口語；Understood 較正式（對主管／客戶）"],
+  ["No worries.","No problem.","都 = 沒關係；No worries 更輕鬆"],
+  ["Come on.","Come on in.","Come on = 快點／拜託；Come on in = 快進來"]]});
+
+N({id:"np2", set:"native", title:"Native phrases 21–40", zh:"狀態與感受",
+ core:"Very + 形容詞 → 一個更強的單字（very tired → exhausted）。工程溝通最常用：It's tricky. / All set. / I'm all ears.",
+ items:[
+  ["Catch you later.","See you.","待會見","c","",1,"L","*Catch you later!*","待會見！"],
+  ["All set.","I'm ready.","都準備好了","w","",1,"S","The samples are *all set* for the test.","樣品都準備好可以測了。"],
+  ["Heading out.","I'm leaving.","要走了","w","完整說 I'm heading out.",1,"M","I'm *heading out*. See you tomorrow.","我要走了，明天見。"],
+  ["I'm lost.","I'm confused.","我跟不上／聽不懂","w","≠ I got lost（迷路）",2,"M","Sorry, *I'm lost*. Which slide are we on?","抱歉我跟不上，現在在哪一頁？"],
+  ["No way.","I'm surprised.","不會吧！","!","也可表示「不行／不可能」",1,"L","*No way!* You passed on the first try?","不會吧！一次就過？"],
+  ["That'll do.","That's enough.","這樣就夠了","w","",2,"S","Two more screws? No, four is fine. *That'll do.*","再兩顆螺絲？不用，四顆夠了。"],
+  ["Just kidding.","Just joking.","開玩笑的","c","",1,"L","*Just kidding!* I'm not angry.","開玩笑的！我沒生氣。"],
+  ["Don't sweat it.","Don't worry.","別放在心上","c","",2,"M","A: Sorry, I sent the wrong file. B: *Don't sweat it.*","A：抱歉寄錯檔。B：別在意。"],
+  ["Piece of cake.","It's easy.","小菜一碟","c","",1,"L","This test is a *piece of cake*.","這個測試小菜一碟。"],
+  ["It's pricey.","It's expensive.","有點貴","w","",1,"S","The die-cast part works, but *it's pricey*.","壓鑄件可行，但有點貴。"],
+  ["It's tricky.","It's difficult.","有點棘手","w","工程溝通超常用",2,"S","*It's tricky* to route the cable with only 3 mm of space.","只有 3 mm 空間走 cable 很棘手。"],
+  ["Awesome.","Very good.","太棒了","c","",1,"M","The test passed? *Awesome!*","測試過了？太棒了！"],
+  ["Awful.","Very bad.","很糟糕","!","形容事情可以，形容人很重",1,"L","The traffic was *awful* today.","今天交通很糟。"],
+  ["Exhausted.","Very tired.","精疲力盡","w","",1,"L","After the 12-hour build, I was *exhausted*.","12 小時的 build 後我累垮了。"],
+  ["Starving.","Very hungry.","餓扁了","c","",1,"L","I'm *starving*. I skipped lunch.","我餓扁了，沒吃午餐。"],
+  ["Thrilled.","Very happy.","超開心","w","be thrilled with / about",2,"M","The customer is *thrilled* with the new design.","客戶對新設計非常滿意。"],
+  null, // removed: Swamped（保留位置，避免影響其他詞的練習紀錄）
+  ["Maybe later.","Not now.","晚點再說","w","",1,"L","A: Coffee? B: *Maybe later*, thanks.","A：咖啡？B：晚點吧，謝謝。"],
+  ["No biggie.","No problem.","小事啦","c","",1,"L","A: Sorry! B: *No biggie.*","A：抱歉！B：小事。"],
+  ["I'm all ears.","I'm listening.","洗耳恭聽","w","",2,"M","You have a better idea? *I'm all ears.*","你有更好的方法？我洗耳恭聽。"]],
+ ladder:[
+  [1,"S","The test fixture is *all set*.","治具都準備好了。"],
+  [1,"M","I'm *heading out* now. *Catch you later*.","我要走了，待會見。"],
+  [2,"S","Routing the cable over the PSU is *tricky*, and a custom cable is *pricey*.","cable 跨過 PSU 很棘手，客製 cable 又貴。"],
+  [2,"M","I'm busy today, so *maybe later* this week?","我今天很忙，這週晚點再談？"],
+  [3,"M","Sorry, *I'm lost*. Could you go back to the stack-up slide?","抱歉我跟不上，可以回到公差疊加那頁嗎？"],
+  [3,"M","We're *thrilled* with the result, but honestly the whole team is *exhausted*.","我們對結果很開心，但老實說大家都累垮了。"]],
+ compare:[
+  ["I'm busy.","I'm tied up.","tied up = 被事情綁住、現在走不開"],
+  ["I'm lost.","I got lost.","I'm lost 可 = 聽不懂；got lost = 迷路"],
+  ["No problem.","No biggie. / No worries.","都 = 沒事；No biggie 最隨性"]]});
+
+N({id:"hotel", set:"travel", title:"Hotel check-in", zh:"出差住宿 20 句",
+ core:"句型可以直接搬到工作：Could I get…? / I'm here to… / Is … included? / a little too…",
+ items:[
+  ["I have a reservation under my name.","I have a reservation.","我有用我的名字訂房","w","under + 名字 = 以…名義",1,"L","Hi, I *have a reservation under* Chen.","你好，我用 Chen 的名字訂了房。"],
+  ["I'm here to check in.","I want to check in.","我來辦入住","w","I'm here to + V 很好用",1,"S","Hi, *I'm here to* pick up the samples.","你好，我來拿樣品。"],
+  ["What time does check-in start?","What time is check-in?","幾點開始入住？","w","",1,"M","*What time does* the meeting *start*?","會議幾點開始？"],
+  ["What time is check-out?","What time is check-out?","幾點退房？","w","原句已經很自然",1,"L","*What time is check-out*? I have an early flight.","幾點退房？我搭早班機。"],
+  ["Could I take a look at the room?","Can I see the room?","我可以看一下房間嗎？","w","Could I…? 比 Can I…? 禮貌",1,"S","*Could I take a look at* the failed unit?","我可以看一下失效的機台嗎？"],
+  ["Does the room include breakfast?","Is breakfast included?","房價含早餐嗎？","w","",2,"M","*Does the price include* shipping?","價格含運費嗎？"],
+  ["Is Wi-Fi included?","Is Wi-Fi free?","有含 Wi-Fi 嗎？","w","",2,"S","*Is* the screw *included* in the BOM cost?","螺絲有含在 BOM 成本裡嗎？"],
+  ["What's the Wi-Fi password?","What is the Wi-Fi password?","Wi-Fi 密碼是什麼？","w","口語用縮寫 What's",1,"S","*What's the* part number for this bracket?","這個 bracket 的料號是什麼？"],
+  ["Where's my room?","Where is my room?","我的房間在哪？","w","",1,"M","*Where's the* meeting room?","會議室在哪？"],
+  ["How do I get to my room from here?","How do I get to my room?","從這裡怎麼去房間？","w","get to = 到達",1,"S","*How do I get to* the lab *from here*?","從這裡怎麼去實驗室？"],
+  ["Is there an elevator nearby?","Is there an elevator?","附近有電梯嗎？","w","",1,"M","*Is there* a printer *nearby*?","附近有印表機嗎？"],
+  ["Could I get an extra key?","Can I have another key?","可以多給我一張房卡嗎？","w","extra = 額外的",2,"S","*Could I get an extra* sample for the drop test?","可以多給我一個樣品做落摔嗎？"],
+  ["Could I get a late checkout?","I need a late checkout.","可以晚點退房嗎？","w","用問句比 I need 客氣",2,"M","*Could I get* one more day for the report?","報告可以多給我一天嗎？"],
+  ["Can I leave my bags here for a while?","Can I leave my bags here?","行李可以寄放一下嗎？","w","for a while = 一會兒",1,"S","*Can I leave* this sample *here for a while*?","這個樣品可以放這裡一下嗎？"],
+  ["The room is a little too cold.","The room is too cold.","房間有點太冷","w","加 a little 讓抱怨更客氣",2,"S","The gap is *a little too* small.","間隙有點太小。"],
+  ["The AC isn't working.","The air conditioner isn't working.","冷氣壞了","w","AC = air conditioner",1,"S","The fan *isn't working* on unit #3.","3 號機的風扇不會轉。"],
+  ["Could I get some extra towels?","I need extra towels.","可以多給些毛巾嗎？","w","",1,"S","*Could I get some extra* screws? I dropped two.","可以多給我幾顆螺絲嗎？我掉了兩顆。"],
+  ["Could someone give me a hand?","Can someone help me?","有人能幫我一下嗎？","w","give me a hand = 幫忙",1,"S","*Could someone give me a hand* with this chassis? It's heavy.","有人能幫我搬這台機箱嗎？很重。"],
+  ["I'm ready to check out.","I am checking out now.","我要退房了","w","I'm ready to + V",1,"S","*I'm ready to* start the test.","我準備好開始測試了。"],
+  ["Thanks for your help!","Thank you for your help.","謝謝幫忙！","w","",1,"M","*Thanks for your help* with the build!","謝謝你協助這次 build！"]],
+ ladder:[
+  [1,"L","Hi, *I'm here to check in*. I *have a reservation under* Lin.","你好，我來辦入住，用 Lin 的名字訂房。"],
+  [1,"L","*What's the Wi-Fi password*?","Wi-Fi 密碼是什麼？"],
+  [2,"L","*Could I get a late checkout*? My flight is at 6 p.m.","可以晚點退房嗎？我的班機是晚上 6 點。"],
+  [2,"S","*Could someone give me a hand* with these sample boxes?","有人能幫我搬這些樣品箱嗎？"],
+  [3,"L","The room is *a little too cold*, and I think *the AC isn't working* properly.","房間有點太冷，冷氣好像不太正常。"],
+  [3,"M","I'm here for a three-day build, so *could I leave my bags here for a while* after checkout?","我來參加三天的 build，退房後行李可以先寄放嗎？"]],
+ compare:[
+  ["Can I…?","Could I…?","Could 比較禮貌，對飯店／客戶用 Could"],
+  ["I need…","Could I get…?","用問句提出需求更客氣"],
+  ["too cold","a little too cold","加 a little 讓抱怨變柔和"]]});
+
+// ---------- 問答回應 ----------
+const Q = (o) => RAW.push(Object.assign({kind:"qa", set:"talk"}, o));
+
+Q({id:"qa1", title:"Replies 1–5", zh:"問候、在忙嗎、你在哪",
+ core:"同一個問題可以有很多回法，重點是語氣：Pretty good（不錯）、Not too bad（還可以）、Kind of（有點）。",
+ items:[
+  ["How are you?",["I'm doing great!","Pretty good.","Can't complain.","I'm doing well.","Not too bad."],"你好嗎？",1,"M","A: How are you? B: *Pretty good*, thanks. And you?","A：你好嗎？B：不錯，謝謝，你呢？"],
+  ["What's up?",["Not much.","Just chilling.","Same as always.","Just working.","All good."],"最近怎樣／在幹嘛？",1,"L","A: What's up? B: *Not much.* *Just working.*","A：在幹嘛？B：沒什麼，在工作。"],
+  ["What are you doing?",["Just relaxing.","Finishing some work.","Watching TV.","Running errands.","Nothing much."],"你在做什麼？",1,"L","A: What are you doing? B: *Finishing some work.* Give me ten minutes.","A：在做什麼？B：在收尾工作，給我 10 分鐘。"],
+  ["Are you busy?",["A little.","Not really.","Kind of.","I'm free now.","Give me a minute."],"你在忙嗎？",1,"M","A: Are you busy? B: *Give me a minute.* I'm sending an email.","A：在忙嗎？B：等我一下，我在寄信。"],
+  ["Where are you?",["I'm at home.","I'm at work.","I'm on my way.","I'm nearby.","Almost there."],"你在哪？",1,"M","A: Where are you? The meeting is starting. B: *I'm on my way.* *Almost there.*","A：你在哪？會議要開始了。B：在路上，快到了。"]],
+ ladder:[
+  [1,"M","A: How are you? B: *I'm doing well*, thanks.","A：你好嗎？B：很好，謝謝。"],
+  [1,"L","A: What's up? B: *Not much.*","A：怎樣？B：沒什麼。"],
+  [2,"M","A: Are you busy? B: *Kind of*, but I can talk for five minutes.","A：在忙嗎？B：有點，但可以聊五分鐘。"],
+  [2,"S","A: Where are you? B: *I'm at work*, in the lab.","A：你在哪？B：在公司實驗室。"],
+  [3,"M","A: How's the project going? B: *Can't complain.* The DVT results look better than we expected.","A：專案怎樣？B：還不錯，DVT 結果比預期好。"],
+  [3,"S","A: What are you doing? B: Just *finishing some work* on the cable routing before the review.","A：在做什麼？B：審查前在收尾 cable 走線。"]],
+ compare:[
+  ["How are you?","What's up?","How are you 一般問候；What's up 很隨性，回 Not much 即可"],
+  ["I'm on my way.","Almost there.","on my way = 已出發在路上；almost there = 快到了"],
+  ["Not too bad.","Not really.","Not too bad = 還不錯；Not really = 不太（否定）"]]});
+
+Q({id:"qa2", title:"Replies 6–10", zh:"幫忙、準備好了嗎、你覺得呢、道別",
+ core:"對主管或客戶：I'd be happy to. / Absolutely. / I'm not sure yet. 比單字回答更專業。",
+ items:[
+  ["Can you help me?",["Sure!","Of course.","I'd be happy to.","No problem.","Absolutely."],"你能幫我嗎？",1,"M","A: Can you help me check this drawing? B: *I'd be happy to.*","A：能幫我看這張圖嗎？B：很樂意。"],
+  ["Are you ready?",["I'm all set.","Ready to go.","Let's do this.","Good to go.","Yep!"],"準備好了嗎？",1,"S","A: Are you ready for the test? B: *Good to go.*","A：準備好測試了嗎？B：可以了。"],
+  ["What do you think?",["Sounds good.","I like it.","That's a great idea.","I'm not sure.","Let's do it."],"你覺得呢？",1,"M","A: What do you think about adding a rib? B: *That's a great idea.*","A：加一根肋條你覺得呢？B：好主意。"],
+  ["Do you like it?",["I love it.","It's awesome.","It's pretty good.","Not really.","It's okay."],"你喜歡嗎？",1,"L","A: Do you like the new office? B: *It's pretty good.*","A：喜歡新辦公室嗎？B：還不錯。"],
+  ["See you later.",["Catch you later.","See you around.","Take care.","Talk soon.","Have a good one."],"待會見／再見",1,"M","A: See you later. B: *Talk soon.*","A：再見。B：再聯絡。"]],
+ ladder:[
+  [1,"M","A: Can you help me? B: *Sure!*","A：能幫我嗎？B：當然！"],
+  [1,"L","A: See you later. B: *Take care.*","A：再見。B：保重。"],
+  [2,"S","A: Are you ready to start the drop test? B: *I'm all set.*","A：準備好開始落摔了嗎？B：都好了。"],
+  [2,"M","A: What do you think of the new layout? B: *I like it*, but the cable looks tight.","A：新布局你覺得呢？B：我喜歡，但 cable 看起來很緊。"],
+  [3,"M","A: What do you think? B: *I'm not sure* yet. Can I check the tolerance stack-up first?","A：你覺得呢？B：還不確定，我可以先看公差疊加嗎？"],
+  [3,"M","A: Can you join the customer call tomorrow? B: *Absolutely.* Please send me the latest slides.","A：明天能參加客戶會議嗎？B：當然，請寄最新簡報給我。"]],
+ compare:[
+  ["Sure.","I'd be happy to.","Sure 隨意；I'd be happy to 對客戶／主管更有禮"],
+  ["Good to go.","Let's do this.","Good to go = 都沒問題可以開始；Let's do this = 有幹勁地開始"],
+  ["It's okay.","It's pretty good.","It's okay 有時 = 普通（不太滿意）；pretty good = 不錯"]]});
+
+
+// ---------- 新增單字 ----------
+RAW.push({kind:"word", set:"added", id:"intend", title:"intend to", zh:"打算、有意（意圖與計畫的比較）",
+ core:"intend to + 原形動詞 = 打算做（較正式，email／報告常用）。名詞：intention。口語常用 be going to / plan to。",
+ items:[
+  ["intend to","打算、有意（較正式）","intend to + 原形 V；比 plan to 正式","w",[
+    [1,"L","I *intend to* study English every day.","我打算每天念英文。"],
+    [2,"M","We *intend to* finish the EVT build by the end of May.","我們打算在五月底前完成 EVT build。"],
+    [3,"S","We *intend to* replace the plastic bracket with sheet metal, but we need to check the cost impact first.","我們打算把塑膠 bracket 改成鈑金，但要先確認成本影響。"]]],
+  ["plan to","計畫要（有具體安排）","有時程、有安排時最自然","w",[
+    [1,"L","I *plan to* visit my parents this weekend.","我計畫這週末回去看爸媽。"],
+    [2,"S","We *plan to* start the drop test on Monday.","我們計畫週一開始落摔測試。"],
+    [3,"M","We *plan to* release the drawings next week, so please send your comments by Friday.","我們計畫下週發圖，請週五前給意見。"]]],
+  ["be going to","要、將會（已決定）","最口語；也可表示「看起來快要…」的預測","w",[
+    [1,"L","I'm *going to* buy a new laptop.","我要買一台新筆電。"],
+    [2,"M","I'm *going to* share my screen and show the new design.","我要分享螢幕，展示新設計。"],
+    [3,"S","If the gap stays under 0.3 mm, the cable *is going to* rub against the fan blade.","如果間隙一直小於 0.3 mm，cable 會磨到風扇葉片。"]]],
+  ["mean to","有意、故意","常用否定：I didn't mean to… = 我不是故意的","c",[
+    [1,"L","Sorry, I didn't *mean to* wake you up.","抱歉，我不是故意吵醒你。"],
+    [2,"M","Sorry, I didn't *mean to* interrupt you. Please go on.","抱歉，不是故意打斷你，請繼續。"],
+    [3,"M","I *meant to* send you the report yesterday, but I forgot to attach the file.","我昨天本來要寄報告給你，但忘了附檔。"]]],
+  ["aim to","目標是","常搭配數字目標","w",[
+    [1,"L","I *aim to* walk 8,000 steps a day.","我的目標是每天走 8,000 步。"],
+    [2,"S","We *aim to* reduce the chassis weight by 10%.","我們的目標是機箱減重 10%。"],
+    [3,"M","This design change *aims to* improve airflow without adding new parts to the BOM.","這個設計變更的目標是改善風流，且不增加 BOM 零件。"]]],
+  ["be supposed to","照理應該、預定要","規定或預定的事，但可能沒做到","w",[
+    [1,"L","The bus *is supposed to* come at 8.","公車應該 8 點來。"],
+    [2,"S","The samples *were supposed to* arrive today, but they are delayed.","樣品原本今天要到，但延遲了。"],
+    [3,"M","According to the spec, the label *is supposed to* be on the rear side, not on the top cover.","依照規格，標籤應該貼在後側，而不是上蓋。"]]]],
+ ladder:[
+  [1,"L","I *intend to* sleep early tonight.","我打算今晚早點睡。"],
+  [1,"M","I'm *going to* call the supplier now.","我現在要打給供應商。"],
+  [2,"M","We *intend to* use the same rail as the last project.","我們打算沿用上一個專案的滑軌。"],
+  [2,"S","Sorry, I didn't *mean to* send you the old 3D file.","抱歉，我不是故意寄舊的 3D 檔給你。"],
+  [3,"M","We *intend to* freeze the design in June, so any major change after that will need customer approval.","我們打算六月凍結設計，之後的重大變更都需要客戶核准。"],
+  [3,"S","The new latch *is supposed to* make service easier, and we *aim to* cut the removal time to under 30 seconds.","新卡勾理應讓維修更容易，我們的目標是把拆卸時間降到 30 秒內。"]],
+ compare:[
+  ["intend to","plan to","intend 較正式、強調意圖；plan 有具體計畫或時程"],
+  ["be going to","intend to","going to 口語、已決定；intend to 正式、常用於書面"],
+  ["mean to","intend to","mean to 常用在「不是故意的」；intend to 用在正式計畫"],
+  ["be supposed to","plan to","supposed to = 照規定／預定應該（不一定做到）"],
+  ["intend to do ✓","intend to doing ✗","to 後面接原形動詞"]]});
+// ---------- 文法：when / while ----------
+RAW.push({kind:"ww", set:"grammar", id:"ww", title:"when / while", zh:"時間點 vs 一段期間", visual:"timeline", heads:["when","while"],
+ core:"when = 那一刻（短動作、突然發生）；while = 持續中的期間（兩件事同時進行）",
+ items:[
+  ["when","I was cooking *when* the phone rang.","我在煮飯時，電話響了。","when 接短暫、突然的事",1,"L"],
+  ["while","*While* I was cooking, my wife was cleaning.","我煮飯時，太太在打掃。","while 接持續中的動作，兩件事同時",1,"L",true],
+  ["when","Call me *when* you get the test result.","拿到測試結果時打給我。","when + 一個時間點",1,"M"],
+  ["while","Please don't touch the unit *while* the test is running.","測試進行中請不要碰機台。","while + 進行中的狀態",2,"S"],
+  ["when","The fan stopped *when* we closed the top cover.","我們蓋上上蓋時，風扇停了。","",2,"S"],
+  ["while","*While* you check the drawing, I'll prepare the BOM.","你看圖的同時，我來準備 BOM。","",2,"M"],
+  ["when","*When* I was a mobile engineer, I designed many plastic parts.","我當手機工程師的時候，設計過很多塑膠件。","when 也可接一段人生階段",3,"L",true],
+  ["while","The cable got damaged *while* we were installing the PSU.","安裝 PSU 的過程中，cable 被弄壞了。","while + 過去進行式",3,"S",true]],
+ ladder:[
+  [1,"L","*When* I got home, I was very tired.","我回到家時很累。"],
+  [1,"L","I listen to music *while* I work.","我邊工作邊聽音樂。"],
+  [2,"S","The screw broke *when* I tightened it to 6 kgf·cm.","我鎖到 6 kgf·cm 時螺絲斷了。"],
+  [2,"M","*While* we wait for the samples, let's review the DFM report.","等樣品的時候，我們先看 DFM 報告。"],
+  [3,"S","We found a short circuit *while* we were doing the drop test, so we stopped *when* the third unit failed.","落摔測試過程中發現短路，第三台失效時我們就停了。"],
+  [3,"M","*While* I agree with the design, I'm worried about the cost.","雖然我同意這個設計，但我擔心成本。（while = 雖然，進階）"]],
+ compare:[
+  ["when","while","when = 時間點／短動作；while = 持續的期間／同時"],
+  ["I was cooking when…","While I was cooking…","長動作用進行式，短動作用過去式"],
+  ["While（同時）","While（雖然）","句首 While + 意見 可表示「雖然」，正式寫作常見"]]});
+
+</script>
+<script>
+(function(){
+"use strict";
+const LV = {1:"A2+ / B1", 2:"B1", 3:"B1+ / B2"};
+const CTX = {L:"生活", S:"Server", M:"會議"};
+const FIT = {w:["w","工作可用"], c:["c","口語"], "!":["x","小心用"]};
+const VERB_HEADS = ["have","take","do","make","go","come","get","put"];
+const DAILY = 12;
+
+const $ = (s, r=document) => r.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const mark = (s) => esc(s).replace(/\*(.+?)\*/g, "<mark>$1</mark>");
+const plain = (s) => String(s ?? "").replace(/\*/g, "");
+const today = () => { const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+const shuffle = (a) => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const cap = (s) => s.charAt(0).toUpperCase()+s.slice(1);
+
+/* ---------- normalize data ---------- */
+let GROUPS = [];
+function normBuiltIn(){
+  return RAW.map(g => {
+    const G = {id:g.id, set:g.set, kind:g.kind, title:g.title, zh:g.zh, core:g.core, compare:g.compare||[], ladder:g.ladder||[], visual:g.visual, heads:g.heads, head:g.head, items:[]};
+    g.items.forEach((t, i) => {
+      if (!t) return;
+      const key = g.id+":"+i; let it;
+      if (g.kind === "verb"){
+        const [obj,zh,note,fit,alt,lv,ctx,en,zx,noquiz] = t;
+        it = {key, en:g.head+" "+obj, zh, note, fit, ex:[lv,ctx,en,zx], head:g.head, rest:obj, alt:(alt||"").split(",").filter(Boolean), noquiz:noquiz||g.noquiz};
+      } else if (g.kind === "prep"){
+        const [p,rest,zh,note,lv,ctx,en,zx,nq] = t;
+        it = {key, en:p+" "+rest, zh, note, fit:"", ex:[lv,ctx,en,zx], head:p, rest, noquiz:!!nq};
+      } else if (g.kind === "pair"){
+        const [nat,basic,zh,fit,note,lv,ctx,en,zx] = t;
+        it = {key, en:nat, basic, zh, note, fit, ex:[lv,ctx,en,zx]};
+      } else if (g.kind === "qa"){
+        const [q,replies,zh,lv,ctx,en,zx] = t;
+        it = {key, en:q, replies, zh, note:"", fit:"", ex:[lv,ctx,en,zx]};
+      } else if (g.kind === "word"){
+        const [en,zh,note,fit,exs] = t;
+        it = {key, en, zh, note, fit, ex:exs[0], exs};
+      } else if (g.kind === "ww"){
+        const [ans,sent,zh,note,lv,ctx,nq] = t;
+        it = {key, en:plain(sent), ans, zh, note, fit:"", ex:[lv,ctx,sent,zh], noquiz:!!nq};
+      }
+      if (it.exs){ G.items.push(it); return; }
+      const extra = (typeof EX3 !== "undefined" && EX3[g.id] && EX3[g.id][i]) || [];
+      const missing = [1,2,3].filter(l => l !== it.ex[0]);
+      it.exs = [it.ex].concat(extra.map((x,k) => [missing[k], x[0], x[1], x[2]])).sort((a,b) => a[0]-b[0]);
+      G.items.push(it);
+    });
+    return G;
+  });
+}
+function normCustom(doc){
+  const g = doc; const id = g.id;
+  return {id, set:"custom", kind:"custom", title:g.title||"My words", zh:g.zh||"", core:g.core||"", compare:Array.isArray(g.compare)?g.compare:[], ladder:Array.isArray(g.ladder)?g.ladder:[],
+    items:(g.items||[]).map((x,i)=>{ const exs = Array.isArray(x.exs) ? x.exs : Array.isArray(x.ex) ? (Array.isArray(x.ex[0]) ? x.ex : [x.ex]) : [[1,"L",x.en,""]];
+      return {key:id+":"+i, en:x.en, zh:x.zh, note:x.note||"", fit:x.fit||"", basic:x.basic||"", ex:exs[0], exs:exs.slice().sort((a,b)=>a[0]-b[0])}; })};
+}
+
+/* ---------- storage ---------- */
+let P = {marks:{}, days:{}, queue:null};
+let CUSTOM = [];
+const Store = {
+  db:null, base:null, timer:null,
+  local(k, v){ try{ if (v === undefined){ const s = localStorage.getItem("del:"+k); return s ? JSON.parse(s) : null; } localStorage.setItem("del:"+k, JSON.stringify(v)); }catch(e){ return null; } },
+  async init(){
+    const lp = this.local("progress"); if (lp) P = Object.assign(P, lp);
+    const lc = this.local("custom"); if (Array.isArray(lc)) CUSTOM = lc;
+    try{
+      if (!window.claude || !window.claude.use) return;
+      const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+      if (!db || !user) return;
+      const uid = await user.id(); if (!uid) return;
+      this.db = db; this.base = "data/users/"+uid;
+      const snap = await db.collection(this.base).get();
+      let gotProgress = false; const cs = [];
+      snap.docs.forEach(d => {
+        const data = d.data() || {};
+        try{
+          if (d.id === "progress" && data.json){ P = Object.assign({marks:{},days:{},queue:null}, JSON.parse(data.json)); gotProgress = true; }
+          else if (d.id.startsWith("g_") && data.json){ cs.push(JSON.parse(data.json)); }
+        }catch(e){}
+      });
+      if (!gotProgress && (Object.keys(P.marks).length || Object.keys(P.days).length)) this.saveProgress(true);
+      if (cs.length) CUSTOM = cs.sort((a,b)=>(a.created||0)-(b.created||0));
+      else if (CUSTOM.length) CUSTOM.forEach(g => this.saveCustom(g));
+      this.local("progress", P); this.local("custom", CUSTOM);
+      refreshAll();
+    }catch(e){ console.warn("db unavailable", e); }
+  },
+  saveProgress(now){
+    this.local("progress", P);
+    if (!this.db) return;
+    clearTimeout(this.timer);
+    const go = () => this.db.doc(this.base+"/progress").set({json:JSON.stringify(P), at:Date.now()}).catch(e=>console.warn(e));
+    if (now) go(); else this.timer = setTimeout(go, 1500);
+  },
+  async saveCustom(g){
+    this.local("custom", CUSTOM);
+    if (this.db) await this.db.doc(this.base+"/"+g.id).set({json:JSON.stringify(g)}).catch(e=>console.warn(e));
+  },
+  async deleteCustom(id){
+    this.local("custom", CUSTOM);
+    if (this.db) await this.db.doc(this.base+"/"+id).delete().catch(e=>console.warn(e));
+  }
+};
+
+function rebuild(){
+  GROUPS = normBuiltIn().concat(CUSTOM.map(normCustom));
+}
+function allItems(){ return GROUPS.flatMap(g => g.items.map(it => Object.assign({group:g}, it))); }
+function groupById(id){ return GROUPS.find(g => g.id === id); }
+
+/* ---------- speech ---------- */
+let VOICE = null;
+function pickVoice(){
+  if (!("speechSynthesis" in window)) return;
+  const vs = speechSynthesis.getVoices();
+  VOICE = vs.find(v => /en-US/i.test(v.lang) && /Samantha|Google|Aria|Jenny|Natural/i.test(v.name)) || vs.find(v => /en-US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
+}
+if ("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+let TTS_MODE = (function(){ try{ return localStorage.getItem("del:tts") || "browser"; }catch(e){ return "browser"; } })();
+function setTtsMode(m){ TTS_MODE = m; try{ localStorage.setItem("del:tts", m); }catch(e){} document.querySelectorAll("[data-tts]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tts === m))); }
+const gtUrl = (t) => "https://translate.google.com/?sl=en&tl=zh-TW&op=translate&text=" + encodeURIComponent(plain(t).replace(/\b[AB]: /g, ""));
+function openGoogle(t){ const w = window.open(gtUrl(t), "_blank", "noopener"); if (!w) toast("瀏覽器擋下了新分頁。請允許彈出視窗，或長按 ▶ 旁的 G 連結開啟。"); }
+let toastTimer = null;
+function toast(html, ms){
+  let el = document.getElementById("toast");
+  if (!el){ el = document.createElement("div"); el.id = "toast"; el.setAttribute("role","status"); document.body.appendChild(el); }
+  el.innerHTML = html; el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => el.hidden = true, ms || 7000);
+}
+function speak(text){
+  if (TTS_MODE === "google") { openGoogle(text); return; }
+  const fail = () => toast(`這個瀏覽器沒有發出聲音。<button class="btn ghost" type="button" id="tGo">改用 Google 翻譯發音</button>`, 9000);
+  if (!("speechSynthesis" in window)) { fail(); bindFail(text); return; }
+  const synth = window.speechSynthesis;
+  let started = false;
+  try{
+    if (synth.speaking || synth.pending) synth.cancel();
+    const u = new SpeechSynthesisUtterance(plain(text).replace(/\b[AB]: /g, ""));
+    u.lang = "en-US"; u.rate = 0.9;
+    if (!VOICE) pickVoice();
+    if (VOICE) u.voice = VOICE;
+    u.onstart = () => { started = true; };
+    u.onerror = (e) => { if (!started && e.error !== "interrupted" && e.error !== "canceled") { fail(); bindFail(text); } };
+    synth.resume();
+    setTimeout(() => { synth.speak(u); }, 60);
+    setTimeout(() => { if (!started && !synth.speaking) { fail(); bindFail(text); } }, 2500);
+  }catch(e){ fail(); bindFail(text); }
+}
+function bindFail(text){
+  const b = document.getElementById("tGo");
+  if (b) b.onclick = () => { setTtsMode("google"); openGoogle(text); document.getElementById("toast").hidden = true; };
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-say]"); if (b){ e.stopPropagation(); speak(b.getAttribute("data-say")); return; }
+  const m = e.target.closest("[data-tts]"); if (m){ setTtsMode(m.dataset.tts); if (m.dataset.tts === "browser") speak("Hello. Let's get started."); }
+});
+const sayBtn = (t) => `<button class="say" type="button" aria-label="朗讀" title="朗讀" data-say="${esc(plain(t))}">▶</button>`;
+const ctxTag = (c) => `<span class="ctx ${esc(c)}">${esc(CTX[c]||c)}</span>`;
+const fitTag = (f) => FIT[f] ? `<span class="fit ${FIT[f][0]}">${FIT[f][1]}</span>` : "";
+const sentLvHTML = (s) => `<div class="sent"><div class="line">${sayBtn(s[2])}<div class="tx"><span class="lvb l${esc(s[0])}">${esc(LV[s[0]]||"")}</span>${ctxTag(s[1])}${mark(s[2])}<div class="tr">${esc(s[3]||"")}</div></div></div></div>`;
+const exsHTML = (it) => (it.exs || [it.ex]).map(sentLvHTML).join("");
+const setName = (sid) => { const x = SETS.find(t => t.id === sid); return x ? x.name : (sid === "custom" ? "我的新增" : ""); };
+const sentHTML = (s) => `<div class="sent"><div class="line">${sayBtn(s[2])}<div class="tx">${ctxTag(s[1])}${mark(s[2])}<div class="tr">${esc(s[3]||"")}</div></div></div></div>`;
+
+/* ---------- stats ---------- */
+function streak(){
+  let n = 0; const d = new Date();
+  if (!(P.days[today()] > 0)) d.setDate(d.getDate()-1);
+  for (;;){ const k = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); if (P.days[k] > 0){ n++; d.setDate(d.getDate()-1); } else break; }
+  return n;
+}
+function updateStats(){
+  const items = allItems();
+  $("#stStreak").textContent = streak();
+  $("#stToday").textContent = P.days[today()] || 0;
+  $("#stKnown").textContent = items.filter(i => P.marks[i.key] && P.marks[i.key].s === "ok").length;
+  $("#stTotal").textContent = items.length;
+}
+function setMark(key, s){
+  const m = P.marks[key] || {n:0};
+  m.s = s; m.n = (m.n||0)+1; m.t = today(); P.marks[key] = m;
+}
+
+/* ---------- tabs ---------- */
+let currentView = "today";
+function show(v){
+  currentView = v;
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.v === v)));
+  document.querySelectorAll(".view").forEach(s => s.hidden = s.id !== "v-"+v);
+  if (v === "today") renderToday();
+  if (v === "lib") renderLib();
+  if (v === "quiz") renderQuizHome();
+  if (v === "add") renderAdd();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => show(b.dataset.v)));
+function refreshAll(){ rebuild(); updateStats(); show(currentView); }
+
+/* ---------- library ---------- */
+let libSel = {type:"group", id:"have"};
+let showZh = true;
+function setsWithCustom(){ const s = SETS.slice(); if (CUSTOM.length) s.push({id:"custom", name:"我的新增", desc:"你自己加入的詞彙"}); return s; }
+function renderLib(){
+  const side = $("#side");
+  side.innerHTML = setsWithCustom().map(s => {
+    const gs = GROUPS.filter(g => g.set === s.id);
+    return `<div class="set"><button class="setbtn" data-set="${s.id}" aria-current="${libSel.type==='set'&&libSel.id===s.id}">${esc(s.name)}<small>${esc(s.desc)}</small></button>`+
+      gs.map(g => `<button class="gbtn" data-g="${g.id}" aria-current="${libSel.type==='group'&&libSel.id===g.id}"><span>${esc(g.title)}</span><span>${g.items.length}</span></button>`).join("")+`</div>`;
+  }).join("");
+  side.querySelectorAll("[data-g]").forEach(b => b.onclick = () => { libSel = {type:"group", id:b.dataset.g}; renderLib(); $("#detail").scrollIntoView({block:"start", behavior:"smooth"}); });
+  side.querySelectorAll("[data-set]").forEach(b => b.onclick = () => { libSel = {type:"set", id:b.dataset.set}; renderLib(); });
+  if (libSel.type === "group" && !groupById(libSel.id)) libSel = {type:"group", id:GROUPS[0].id};
+  $("#detail").innerHTML = libSel.type === "set" ? setHTML(libSel.id) : groupHTML(groupById(libSel.id));
+  bindDetail();
+}
+function setHTML(sid){
+  const s = setsWithCustom().find(x => x.id === sid); const gs = GROUPS.filter(g => g.set === sid);
+  let extra = "";
+  if (sid === "verbs"){
+    extra = `<h3>同一個名詞，換動詞意思就變</h3><div class="tablewrap"><table class="cmp"><thead><tr><th>搭配</th><th>對照</th><th>差別</th></tr></thead><tbody>
+      <tr><td>have a look</td><td>take a look</td><td>相同（看一下）</td></tr>
+      <tr><td>have a chance</td><td>take a chance</td><td>有機會 vs 冒險一試</td></tr>
+      <tr><td>do a decision ✗</td><td>make a decision ✓</td><td>決定是「產生結果」→ make</td></tr>
+      <tr><td>go crazy</td><td>get ready</td><td>go + adj 變糟；get + adj 一般變化</td></tr>
+      <tr><td>put on a jacket</td><td>put off a meeting</td><td>穿上 vs 延後</td></tr>
+      <tr><td>come first</td><td>go first</td><td>最優先 vs 先開始</td></tr></tbody></table></div>`;
+  }
+  return `<div class="sheet"><h2>${esc(s.name)}</h2><p class="sub">${esc(s.desc)}${s.src?"　｜　來源截圖："+esc(s.src):""}</p>
+    <h3>核心意象總表</h3><div class="tablewrap"><table><thead><tr><th>群組</th><th>中文</th><th>核心意象</th><th>數量</th></tr></thead><tbody>`+
+    gs.map(g => `<tr class="item" data-open="${g.id}"><td class="en">${esc(g.title)}</td><td>${esc(g.zh)}</td><td>${esc(g.core)}</td><td>${g.items.length}</td></tr>`).join("")+
+    `</tbody></table></div>${extra}</div>`;
+}
+function visualHTML(g){
+  if (g.visual === "zoom"){
+    return `<h3>由大到小：in → on → at</h3><div class="zoom">
+      <div class="zoomcol"><h4>時間</h4><div class="nest"><b>in 2026</b><span class="k">年</span><div class="nest"><b>in April</b><span class="k">月</span><div class="nest"><b>on Monday</b><span class="k">某一天</span><div class="nest"><span class="dot"></span><b>at 5 PM</b><span class="k">時間點</span></div></div></div></div></div>
+      <div class="zoomcol"><h4>地點（以 Server 為例）</h4><div class="nest"><b>in Taipei</b><span class="k">城市</span><div class="nest"><b>in the chassis</b><span class="k">空間內</span><div class="nest"><b>on the PCBA</b><span class="k">表面上</span><div class="nest"><span class="dot"></span><b>at the rear side</b><span class="k">一個位置點</span></div></div></div></div></div></div>`;
+  }
+  if (g.visual === "timeline"){
+    return `<h3>時間軸比較</h3><div class="timeline" role="img" aria-label="when 是時間軸上的一個點，while 是一段持續的期間">
+    <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Sans, Noto Sans TC, sans-serif">
+      <g fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ink)">
+        <line x1="20" y1="60" x2="610" y2="60"/><path d="M604 54 L614 60 L604 66"/>
+        <line x1="20" y1="150" x2="610" y2="150"/><path d="M604 144 L614 150 L604 156"/>
+      </g>
+      <text x="20" y="30" font-size="18" font-weight="700" fill="var(--l2)">when</text>
+      <text x="90" y="30" font-size="13" fill="var(--muted)">那一刻：短動作、突然發生</text>
+      <rect x="120" y="70" width="320" height="22" rx="4" fill="var(--soft)" stroke="var(--line)"/>
+      <text x="132" y="86" font-size="12" fill="var(--muted)">I was cooking（進行中）</text>
+      <circle cx="380" cy="60" r="8" fill="var(--l2)"/>
+      <text x="350" y="46" font-size="12" fill="var(--l2)">the phone rang</text>
+      <text x="20" y="120" font-size="18" font-weight="700" fill="var(--l3)">while</text>
+      <text x="90" y="120" font-size="13" fill="var(--muted)">一段期間：兩件事同時進行</text>
+      <rect x="120" y="140" width="380" height="20" rx="4" fill="var(--l3)" opacity=".85"/>
+      <text x="132" y="155" font-size="12" fill="#fff">I was cooking</text>
+      <rect x="160" y="165" width="320" height="20" rx="4" fill="var(--marker)" stroke="var(--line)"/>
+      <text x="172" y="180" font-size="12" fill="var(--markInk)">my wife was cleaning</text>
+    </svg></div>`;
+  }
+  return "";
+}
+function itemsTable(g){
+  const k = g.kind;
+  let head, rows;
+  if (k === "pair"){
+    head = `<th>課本說法</th><th>道地說法</th><th>中文</th><th>用法提醒</th><th>正式度</th>`;
+    rows = g.items.map(it => `<td>${esc(it.basic)}</td><td class="en">${esc(it.en)}</td><td>${esc(it.zh)}</td><td>${esc(it.note)}</td><td>${fitTag(it.fit)}</td>`);
+  } else if (k === "qa"){
+    head = `<th>問題</th><th>中文</th><th>5 種回法</th>`;
+    rows = g.items.map(it => `<td class="en">${esc(it.en)}</td><td>${esc(it.zh)}</td><td><div class="chips">${it.replies.map(r=>`<span class="chip">${esc(r)}</span>`).join("")}</div></td>`);
+  } else if (k === "ww"){
+    head = `<th>用</th><th>例句</th><th>重點</th>`;
+    rows = g.items.map(it => `<td class="en">${esc(it.ans)}</td><td>${mark(it.ex[2])}<div class="sub" style="font-size:.85rem">${esc(it.zh)}</div></td><td>${esc(it.note)}</td>`);
+  } else {
+    head = `<th>英文</th><th>中文</th><th>用法提醒</th>${k==="prep"?"":"<th>正式度</th>"}`;
+    rows = g.items.map(it => `<td class="en">${esc(it.en)}</td><td>${esc(it.zh)}</td><td>${esc(it.note)}</td>${k==="prep"?"":`<td>${fitTag(it.fit)}</td>`}`);
+  }
+  const cols = (head.match(/<th>/g)||[]).length;
+  return `<div class="tablewrap"><table><thead><tr>${head}</tr></thead><tbody>`+
+    g.items.map((it,i) => `<tr class="item" data-ex="${i}" tabindex="0" aria-expanded="false">${rows[i]}</tr><tr class="exrow" hidden><td colspan="${cols}">${exsHTML(it)}</td></tr>`).join("")+
+    `</tbody></table></div><p class="sub" style="font-size:.82rem;margin-top:6px">點任一列可展開例句。</p>`;
+}
+function groupHTML(g){
+  if (!g) return "";
+  const lad = [1,2,3].map(l => `<div class="step"><h4>${LV[l]}</h4>${g.ladder.filter(s=>s[0]==l).map(sentHTML).join("") || '<p class="sub">（無）</p>'}</div>`).join("");
+  const cmp = g.compare.length ? `<h3>易混淆比較</h3><div class="tablewrap"><table class="cmp"><thead><tr><th>A</th><th>B</th><th>差別</th></tr></thead><tbody>${g.compare.map(c=>`<tr><td>${esc(c[0])}</td><td>${esc(c[1])}</td><td>${esc(c[2])}</td></tr>`).join("")}</tbody></table></div>` : "";
+  return `<div class="sheet ${showZh?"":"hidezh"}" id="gsheet">
+    <h2>${esc(g.title)}</h2><p class="sub">${esc(g.zh)}</p>
+    ${g.core?`<div class="core">${esc(g.core)}</div>`:""}
+    ${visualHTML(g)}
+    ${cmp}
+    <h3>詞彙表</h3>${itemsTable(g)}
+    <h3>例句階梯</h3>
+    <div class="toolbar"><label class="toggle"><input type="checkbox" id="zhToggle" ${showZh?"checked":""}> 顯示中文翻譯</label>
+      <span class="lvkey"><span><i style="background:var(--l1)"></i>A2+/B1</span><span><i style="background:var(--l2)"></i>B1</span><span><i style="background:var(--l3)"></i>B1+/B2</span></span></div>
+    <div class="ladder">${lad}</div>
+    <div class="row" style="margin-top:22px"><button class="btn" id="quizThis">測驗這一組</button><button class="btn ghost" id="cardThis">用這一組做卡片</button></div>
+  </div>`;
+}
+function bindDetail(){
+  const d = $("#detail");
+  d.querySelectorAll("[data-open]").forEach(r => r.onclick = () => { libSel = {type:"group", id:r.dataset.open}; renderLib(); });
+  d.querySelectorAll("tr[data-ex]").forEach(r => {
+    const tog = () => { const n = r.nextElementSibling; n.hidden = !n.hidden; r.setAttribute("aria-expanded", String(!n.hidden)); };
+    r.onclick = tog; r.onkeydown = e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); tog(); } };
+  });
+  const zt = $("#zhToggle", d); if (zt) zt.onchange = () => { showZh = zt.checked; $("#gsheet").classList.toggle("hidezh", !showZh); };
+  const qt = $("#quizThis", d); if (qt) qt.onclick = () => { quizScope = "g:"+libSel.id; show("quiz"); startQuiz(); };
+  const ct = $("#cardThis", d); if (ct) ct.onclick = () => { const g = groupById(libSel.id); P.queue = {date:today(), keys:shuffle(g.items.map(i=>i.key)), idx:0, label:g.title}; Store.saveProgress(); show("today"); };
+}
+
+/* ---------- today ---------- */
+function buildQueue(){
+  const items = allItems();
+  const weak = shuffle(items.filter(i => P.marks[i.key] && P.marks[i.key].s === "weak"));
+  const unseen = shuffle(items.filter(i => !P.marks[i.key]));
+  const old = items.filter(i => P.marks[i.key] && P.marks[i.key].s === "ok").sort((a,b) => (P.marks[a.key].t||"").localeCompare(P.marks[b.key].t||""));
+  const pick = []; const add = (arr, n) => { for (const x of arr){ if (pick.length >= n) break; if (!pick.includes(x.key)) pick.push(x.key); } };
+  add(weak, 5); add(unseen, DAILY - 2); add(old, DAILY); add(unseen, DAILY); add(weak, DAILY);
+  return {date:today(), keys:shuffle(pick), idx:0, label:"今日"};
+}
+function cardFront(it){
+  const g = it.group;
+  if (g.kind === "pair") return `<div class="q">${esc(it.basic)}<small>${esc(it.zh)}　→ 更道地的說法是？</small></div>`;
+  if (g.kind === "qa") return `<div class="q">${esc(it.en)}<small>${esc(it.zh)}　→ 說出 3 種回法</small></div>`;
+  if (g.kind === "ww") return `<div class="q">${esc(it.ex[2].replace(/\*(.+?)\*/, "____"))}<small>${esc(it.zh)}　→ when 還是 while？</small></div>`;
+  if (g.kind === "verb") return `<div class="q">${esc(it.zh)}<small>提示：____ ${esc(it.rest)}</small></div>`;
+  if (g.kind === "prep") return `<div class="q">${esc(it.zh)}<small>提示：____ ${esc(it.rest)}</small></div>`;
+  return `<div class="q">${esc(it.zh)}<small>提示：${esc((it.en||"").split(" ").map(w=>w[0]+"…").join(" "))}</small></div>`;
+}
+function cardBack(it){
+  const g = it.group;
+  let big = esc(it.en);
+  if (g.kind === "qa") big = it.replies.map(esc).join("　/　");
+  if (g.kind === "ww") big = esc(it.ans);
+  return `<div class="a"><div class="row">${sayBtn(g.kind==="qa"?it.en+". "+it.replies.join(" "):it.en)}<span class="big">${big}</span>${fitTag(it.fit)}</div>
+    ${it.note?`<p class="sub" style="margin-top:6px">${esc(it.note)}</p>`:""}
+    <div style="margin-top:8px">${exsHTML(it)}</div></div>`;
+}
+function renderToday(){
+  const el = $("#v-today");
+  if (!P.queue || (P.queue.date !== today() && P.queue.label === "今日") || !P.queue.keys.length){ P.queue = buildQueue(); Store.saveProgress(); }
+  const map = Object.fromEntries(allItems().map(i => [i.key, i]));
+  P.queue.keys = P.queue.keys.filter(k => map[k]);
+  const q = P.queue, total = q.keys.length;
+  if (q.idx >= total){
+    el.innerHTML = `<div class="today"><div class="card done"><div class="n">${total}</div><p>這一輪完成了。</p>
+      <p class="sub">今天累計 ${P.days[today()]||0} 張，連續 ${streak()} 天。</p>
+      <div class="row" style="justify-content:center;margin-top:16px"><button class="btn" id="again">再來 ${DAILY} 張</button><button class="btn ghost" id="toQuiz">去做測驗</button></div></div></div>`;
+    $("#again").onclick = () => { P.queue = buildQueue(); P.queue.label = "加練"; Store.saveProgress(); renderToday(); };
+    $("#toQuiz").onclick = () => show("quiz");
+    return;
+  }
+  const it = map[q.keys[q.idx]];
+  el.innerHTML = `<div class="today"><div class="row" style="justify-content:space-between"><b>${esc(q.label)}練習</b><span class="sub">${q.idx+1} / ${total}</span></div>
+    <div class="meter"><div style="width:${(q.idx/total*100).toFixed(1)}%"></div></div>
+    <div class="card" id="card"><div class="from">${esc(setName(it.group.set))}　${P.marks[it.key]?(P.marks[it.key].s==="weak"?"・上次還不熟":"・複習"):"・新卡"}</div>
+      ${cardFront(it)}<div id="back" hidden>${cardBack(it)}</div>
+      <div class="actions" id="act"><button class="btn" id="flip">翻面看答案</button></div></div>
+    <p class="sub" style="font-size:.82rem;margin-top:10px">先在心裡（或小聲）說出答案再翻面。「還不熟」的卡片會優先再出現。</p></div>`;
+  $("#flip").onclick = () => {
+    $("#back").hidden = false;
+    $("#act").innerHTML = `<button class="btn weak" id="bw">還不熟</button><button class="btn good" id="bo">記住了</button>`;
+    $("#bw").onclick = () => next("weak"); $("#bo").onclick = () => next("ok");
+    $("#bo").focus();
+  };
+  $("#flip").focus({preventScroll:true});
+  function next(s){ setMark(it.key, s); P.days[today()] = (P.days[today()]||0)+1; q.idx++; Store.saveProgress(); updateStats(); renderToday(); }
+}
+
+/* ---------- quiz ---------- */
+let quizScope = "verbs";
+let QZ = null;
+const QUIZ_SETS = [["verbs","動詞搭配"],["prep","介系詞"],["native","道地說法"],["travel","出差住宿"],["grammar","when / while"],["added","新增單字"],["weak","我還不熟的"]];
+function makeQ(it){
+  const g = it.group;
+  if (g.kind === "verb" && !it.noquiz){
+    const bad = new Set([it.head, ...it.alt]);
+    const opts = shuffle(VERB_HEADS.filter(h => !bad.has(h))).slice(0,3).concat(it.head);
+    return {prompt:`____ ${it.rest}`, hint:it.zh, ans:it.head, opts:shuffle(opts), it};
+  }
+  if (g.kind === "prep" && !it.noquiz){
+    const m = it.ex[2].match(/\*(\S+)/); if (!m || m[1].toLowerCase() !== it.head) return null;
+    const sent = it.ex[2].replace(/\*(\S+)/, "*____").replace(/\*(.+?)\*/, "$1");
+    return {prompt:sent, hint:it.ex[3], ans:it.head, opts:shuffle(g.heads.slice()), it, cap:/^\*/.test(it.ex[2])};
+  }
+  if (g.kind === "pair" && it.basic && it.basic !== it.en){
+    const nz = (t) => String(t).toLowerCase().replace(/^(i'm|it's|i am)\s*/,"").replace(/[^a-z ]/g,"").trim();
+    const pool = allItems().filter(x => x.group.set === g.set && x.key !== it.key && nz(x.en) !== nz(it.en) && x.zh !== it.zh);
+    return {prompt:it.basic, hint:it.zh+"　→ 選出更道地的說法", ans:it.en, opts:shuffle(shuffle(pool).slice(0,3).map(x=>x.en).concat(it.en)), it};
+  }
+  if (g.kind === "ww" && !it.noquiz){
+    return {prompt:it.ex[2].replace(/\*(.+?)\*/, "____"), hint:it.zh, ans:it.ans, opts:["when","while"], it};
+  }
+  if ((g.kind === "custom" || g.kind === "word") && g.items.length >= 2){
+    const pool = g.items.filter(x => x.key !== it.key).map(x => x.en);
+    return {prompt:it.zh, hint:"選出對應的英文", ans:it.en, opts:shuffle(shuffle(pool).slice(0,3).concat(it.en)), it};
+  }
+  return null;
+}
+function renderQuizHome(){
+  const el = $("#v-quiz");
+  const custom = CUSTOM.length ? [["custom","我的新增"]] : [];
+  el.innerHTML = `<div class="today"><h2>選擇測驗</h2><p class="sub">每回 10 題。答錯的題目會自動標成「還不熟」，明天的卡片會優先出現。</p>
+    <div class="qsets">${QUIZ_SETS.concat(custom).map(([id,n]) => `<button aria-pressed="${quizScope===id}" data-s="${id}">${n}</button>`).join("")}</div>
+    <button class="btn" id="startQ">開始測驗</button><div id="qbox"></div></div>`;
+  el.querySelectorAll("[data-s]").forEach(b => b.onclick = () => { quizScope = b.dataset.s; renderQuizHome(); });
+  $("#startQ").onclick = startQuiz;
+}
+function startQuiz(){
+  let pool = allItems();
+  if (quizScope === "weak") pool = pool.filter(i => P.marks[i.key] && P.marks[i.key].s === "weak");
+  else if (quizScope.startsWith("g:")) pool = pool.filter(i => i.group.id === quizScope.slice(2));
+  else pool = pool.filter(i => i.group.set === quizScope);
+  const qs = shuffle(pool).map(makeQ).filter(Boolean).slice(0,10);
+  const box = $("#qbox") || (renderQuizHome(), $("#qbox"));
+  if (!qs.length){ box.innerHTML = `<p class="note" style="margin-top:16px">這個範圍目前沒有可出的題目。${quizScope==="weak"?"先去「今日練習」把不熟的卡片標出來。":""}</p>`; return; }
+  QZ = {qs, i:0, score:0};
+  $("#startQ").textContent = "重新開始";
+  renderQ();
+}
+function renderQ(){
+  const box = $("#qbox"); const {qs, i} = QZ;
+  if (i >= qs.length){
+    box.innerHTML = `<div class="card done" style="margin-top:18px"><div class="n">${QZ.score} / ${qs.length}</div><p>${QZ.score===qs.length?"全對！":"答錯的已加入「還不熟」。"}</p></div>`;
+    Store.saveProgress(); updateStats(); return;
+  }
+  const q = qs[i];
+  const disp = (o) => q.cap && q.prompt.startsWith("____") ? cap(o) : o;
+  box.innerHTML = `<div class="card" style="margin-top:18px;min-height:0"><div class="from">第 ${i+1} / ${qs.length} 題・${esc(setName(q.it.group.set))}</div>
+    <div class="q">${esc(q.prompt)}<small>${esc(q.hint)}</small></div>
+    <div class="opts">${q.opts.map(o => `<button data-o="${esc(o)}">${esc(disp(o))}</button>`).join("")}</div><div id="fb"></div></div>`;
+  box.querySelectorAll("[data-o]").forEach(b => b.onclick = () => {
+    const ok = b.dataset.o === q.ans;
+    box.querySelectorAll("[data-o]").forEach(x => { x.disabled = true; if (x.dataset.o === q.ans) x.classList.add("right"); });
+    if (!ok) b.classList.add("wrong");
+    if (ok) QZ.score++;
+    setMark(q.it.key, ok ? (P.marks[q.it.key]&&P.marks[q.it.key].s==="weak"?"weak":"ok") : "weak");
+    if (ok && P.marks[q.it.key].s === "weak" && P.marks[q.it.key].n >= 2) P.marks[q.it.key].s = "ok";
+    $("#fb").innerHTML = `<div class="fb"><b class="${ok?"ok":"no"}">${ok?"答對了。":"答案是 "+esc(disp(q.ans))+"。"}</b>${q.it.note?` ${esc(q.it.note)}`:""}${exsHTML(q.it)}</div>
+      <div class="row" style="margin-top:14px"><button class="btn" id="nq">${i+1<qs.length?"下一題":"看結果"}</button></div>`;
+    $("#nq").onclick = () => { QZ.i++; renderQ(); }; $("#nq").focus();
+  });
+}
+
+/* ---------- add ---------- */
+let SAMPLE = null, SAMPLE_LIMITS = null, pendingImgs = [], preview = null;
+async function initSample(){
+  try{
+    if (!window.claude || !window.claude.use) return;
+    SAMPLE = await window.claude.use("sample");
+    if (SAMPLE) SAMPLE_LIMITS = await SAMPLE.limits().catch(()=>null);
+    if (currentView === "add") renderAdd();
+  }catch(e){ SAMPLE = null; }
+}
+function renderAdd(){
+  const el = $("#v-add");
+  const canImg = !!(SAMPLE_LIMITS && SAMPLE_LIMITS.images);
+  el.innerHTML = `<h2>新增詞彙</h2><p class="sub">貼上你在網路上看到、不熟的單字或片語（一行一個），${canImg?"或上傳截圖，":""}Claude 會分組、做比較表，並產生三個等級的例句。</p>
+    ${SAMPLE ? `<textarea id="words" placeholder="例如：&#10;run into&#10;run out of&#10;figure out&#10;come up with"></textarea>
+      ${canImg?`<div style="margin-top:10px"><label class="drop" for="imgs">＋ 上傳截圖（最多 ${SAMPLE_LIMITS.images.maxCount} 張）</label><input type="file" id="imgs" accept="${esc(SAMPLE_LIMITS.images.mediaTypes.join(","))}" multiple hidden><div class="thumbs" id="thumbs"></div></div>`:""}
+      <div class="row" style="margin-top:12px"><button class="btn" id="gen">產生比較表與例句</button><button class="btn ghost" id="stop" hidden>停止</button></div>
+      <div class="status" id="st" aria-live="polite"></div><div id="pv"></div>`
+    : `<div class="note">這個畫面目前無法直接呼叫 Claude。請把單字、片語或截圖貼到和 Claude 的對話中，Claude 會整理好並更新到這個 App。</div>`}
+    <h3>我新增的群組</h3>
+    ${CUSTOM.length ? `<ul class="mylist">${CUSTOM.map(g => `<li><b>${esc(g.title)}</b>　<span class="sub">${esc(g.zh||"")}・${(g.items||[]).length} 個</span>　<button class="linkbtn" data-del="${esc(g.id)}">刪除</button></li>`).join("")}</ul>` : `<p class="sub">還沒有。新增後會出現在「詞庫與比較表 → 我的新增」，也會加入每日卡片。</p>`}`;
+  el.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
+    const id = b.dataset.del; const g = CUSTOM.find(x => x.id === id);
+    if (!confirm(`刪除「${g ? g.title : id}」？`)) return;
+    CUSTOM = CUSTOM.filter(x => x.id !== id); await Store.deleteCustom(id); rebuild(); updateStats(); renderAdd();
+  });
+  if (!SAMPLE) return;
+  if (canImg){
+    $("#imgs").onchange = (e) => {
+      pendingImgs = Array.from(e.target.files).slice(0, SAMPLE_LIMITS.images.maxCount);
+      $("#thumbs").innerHTML = pendingImgs.map(f => `<img alt="" src="${URL.createObjectURL(f)}">`).join("");
+    };
+  }
+  $("#gen").onclick = generate;
+  if (preview) showPreview();
+}
+const PROMPT = (words, hasImg) => `You are an English coach for a Taiwanese server mechanical engineer (English level about A2, wants to reach B1-B2).
+Input: words / phrases the learner saw online${hasImg ? " (also extract every English word, phrase or sentence pair from the attached screenshots; ignore app UI text like likes, follow buttons, usernames)" : ""}.
+${words ? "Text input:\n" + words : ""}
+
+Task:
+1. Extract every target word or phrase. Group related or easily confused ones together (each group 3-15 items; one group is fine if they are all related).
+2. For each group, return a comparison-friendly study set.
+
+Return ONLY valid JSON, no markdown, in this exact shape:
+{"groups":[{"title":"short English title","zh":"繁體中文副標","core":"一句繁體中文說明這組的核心差別或記憶方法","compare":[["A","B","繁體中文說明差別"]],"items":[{"en":"expression","zh":"繁體中文意思","note":"繁體中文用法提醒（可空字串）","fit":"w","basic":"","ex":[[1,"L","A2+/B1 sentence with the *target* marked.","繁體中文翻譯"],[2,"S","B1 sentence with the *target*.","繁體中文翻譯"],[3,"M","B1+/B2 sentence with the *target*.","繁體中文翻譯"]]}],"ladder":[[1,"L","Sentence with *target*.","繁體中文翻譯"]]}]}
+
+Rules:
+- fit: "w" = OK at work and meetings, "c" = casual, "!" = be careful (rude, slang, or regional).
+- basic: a simpler textbook equivalent if the item is a native-style phrase, else "".
+- Level numbers: 1 = A2+/B1, 2 = B1, 3 = B1+/B2.
+- items[].ex: exactly 3 example sentences, one for each level 1, 2, 3.
+- ladder: 2 or 3 sentences for EACH level (6-9 total), using several items of the group.
+- Context codes: "L" daily life, "S" server mechanical engineering (chassis, bracket, PCBA, cable routing, tolerance stack-up, rack, screw, fan, PSU, EVT/DVT, DFM), "M" meeting / email English. Mix contexts.
+- compare: 2-4 rows of the most confusing pairs.
+- Use simple, natural English that real engineers say. Mark the target with *asterisks* in every sentence.
+- Chinese must be Traditional Chinese (Taiwan).`;
+let abortCtl = null;
+async function generate(){
+  const words = $("#words").value.trim();
+  if (!words && !pendingImgs.length){ $("#st").textContent = "請先貼上單字或上傳截圖。"; return; }
+  const btn = $("#gen"), stop = $("#stop"), st = $("#st");
+  btn.disabled = true; stop.hidden = false; st.textContent = "Claude 正在整理，約需 20–60 秒…";
+  abortCtl = new AbortController(); stop.onclick = () => abortCtl.abort();
+  try{
+    const opts = {signal:abortCtl.signal, modelTier:"default", cache:false, onText:({text}) => { st.textContent = `產生中…（${text.length} 字）`; }};
+    if (pendingImgs.length) opts.images = pendingImgs;
+    const res = await SAMPLE.json(PROMPT(words, pendingImgs.length > 0), opts);
+    const gs = (res && Array.isArray(res.groups)) ? res.groups : [];
+    const clean = gs.filter(g => g && Array.isArray(g.items) && g.items.length).map((g, n) => ({
+      id:"g_"+Date.now().toString(36)+n, created:Date.now()+n, title:String(g.title||"My words"), zh:String(g.zh||""), core:String(g.core||""),
+      compare:(g.compare||[]).filter(r=>Array.isArray(r)&&r.length>=3).map(r=>r.slice(0,3).map(String)),
+      items:g.items.filter(x=>x&&x.en).map(x => ({en:String(x.en), zh:String(x.zh||""), note:String(x.note||""), fit:["w","c","!"].includes(x.fit)?x.fit:"", basic:String(x.basic||""),
+        ex:(Array.isArray(x.ex) ? (Array.isArray(x.ex[0]) ? x.ex : [x.ex]) : []).filter(r=>Array.isArray(r)&&r.length>=3).map(r=>[Number(r[0])||1, String(r[1]||"L"), String(r[2]), String(r[3]||"")]).concat(Array.isArray(x.ex)&&x.ex.length ? [] : [[1,"L",String(x.en),""]])})),
+      ladder:(g.ladder||[]).filter(r=>Array.isArray(r)&&r.length>=3).map(r=>[Number(r[0])||1,String(r[1]||"L"),String(r[2]),String(r[3]||"")])
+    }));
+    if (!clean.length) throw {message:"回覆的格式不完整"};
+    preview = clean; st.textContent = `完成：${clean.length} 組、${clean.reduce((a,g)=>a+g.items.length,0)} 個詞彙。確認後按「加入詞庫」。`;
+    showPreview();
+  }catch(e){
+    const c = e && e.code;
+    st.textContent = c === "cancelled" ? "已停止。" : c === "not_granted" ? "沒有授權呼叫 Claude。你也可以把單字貼到對話中請 Claude 更新。" : c === "rate_limited" ? "呼叫太頻繁，請稍後再試。" : "產生失敗：" + (e && e.message ? e.message : "請再試一次") ;
+  }finally{ btn.disabled = false; stop.hidden = true; }
+}
+function showPreview(){
+  const pv = $("#pv"); if (!pv || !preview) return;
+  pv.innerHTML = `<div class="row" style="margin:6px 0 14px"><button class="btn" id="saveG">加入詞庫</button><button class="btn ghost" id="dropG">捨棄</button></div>`+
+    preview.map(g => groupHTML(normCustom(g))).join('<div style="height:14px"></div>');
+  pv.querySelectorAll("#quizThis,#cardThis").forEach(b => b.remove());
+  pv.querySelectorAll("tr[data-ex]").forEach(r => r.onclick = () => { const n = r.nextElementSibling; n.hidden = !n.hidden; });
+  $("#dropG").onclick = () => { preview = null; pv.innerHTML = ""; $("#st").textContent = ""; };
+  $("#saveG").onclick = async () => {
+    for (const g of preview){ CUSTOM.push(g); await Store.saveCustom(g); }
+    const first = preview[0].id; preview = null; pendingImgs = [];
+    rebuild(); updateStats(); libSel = {type:"group", id:first}; show("lib");
+  };
+}
+
+/* ---------- boot ---------- */
+rebuild(); updateStats(); show("today"); setTtsMode(TTS_MODE);
+Store.init(); initSample();
+})();
+</script>
+</body>
+</html>
